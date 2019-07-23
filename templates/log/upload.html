@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+	<div>
+		<h1>Upload Content</h1>
+	</div>
+	<div class = "neat">
+		<form method="POST" onsubmit="success()">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<div class="form-actions">
+				<button type="submit">Upload</button>
+		</div>
+	</form>
+{% endblock %}

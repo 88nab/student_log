@@ -10,18 +10,37 @@ USER_TYPE_CHOICES = (
 		('LECTURER', 'Lecturer'),
 	)
 
+class CustomUser(AbstractUser):
+	email = models.EmailField(max_length=70, unique=True)
+	first_name = models.CharField(max_length=50)
+	last_name = models.CharField(max_length=50)
+	user_type = models.CharField(max_length=8, choices=USER_TYPE_CHOICES, default='Student')
+	username = models.CharField(max_length=20, unique=True)
+
+	# class Meta:
+	# 	unique_together = (('email', 'user_type'))
+
+	def __str__(self):
+		return self.user_type
+
 class Subject(models.Model):
-	name = models.CharField(max_length=128)
-	lecturer_email = models.EmailField(max_length=70, unique=True)
+	name = models.CharField(max_length=128) 
+	# Not suure if I need to define the subject
+	lecturer_email = CustomUser.objects.select_related('user_type').filter(user_type='Lecturer')
 
 class Student(models.Model):
-	student_email = models.EmailField(max_length=70, unique=True)
+	student_email = CustomUser.objects.select_related('user_type').filter(user_type='Student')
 	journalID = models.AutoField(primary_key=True)
 
 class Video(models.Model):
-	videoID = models.URLField(unique=True)
+	videoID = models.AutoField(primary_key=True)
+	videoDescription = models.CharField(max_length=250, default="xxx")
+	videoFile = models.FileField(upload_to='videos/', null=True, verbose_name="")
 	views = models.IntegerField(default=0)
 	likes = models.IntegerField(default=0)
+
+	def __str__(self):
+		return self.videoID + ":" + str(self.videoFile)
 
 class Journal(models.Model):
 	student= models.ForeignKey(Student)
@@ -57,24 +76,12 @@ class QuizResult(models.Model):
 	result = models.IntegerField(default=0)
 
 
-class CustomUser(AbstractUser):
-	email = models.ForeignKey(Subject, Student)
-	# need to work out what to do with deleting users
-	first_name = models.CharField(max_length=50)
-	last_name = models.CharField(max_length=50)
-	user_type = models.CharField(max_length=8, choices=USER_TYPE_CHOICES, default='Student')
-	username = models.CharField(max_length=20, unique=True)
-	# password = forms.CharField(widget=forms.PasswordInput())
-
-	def __str__(self):
-		return self.username
 
 class Upload(models.Model):
 	videoID = models.ForeignKey(Video)
 	lecturer_email = models.ForeignKey(Subject)
 	quizID = models.ForeignKey(Quiz)
 	upload_time = models.DateTimeField(default=timezone.now)
-	# subject_name
 	description = models.CharField(max_length=9999, null=True)
 	tag = models.CharField(max_length=25)
 

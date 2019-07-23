@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+
+	<html lang="en">
+		 <head>
+		 	{% block title_block %}
+	 		 <title>Student's Log</title>
+	 		 {% endblock %}
+				  <meta charset="utf-8">
+				  <meta name="viewport" content="width=device-width, initial-scale-1">
+				  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+				  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+				  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	 	</head>
+
+	 	<body>
+
+		    <nav class="navbar navbar-default" style="background-color:#e6ee9c">
+		        <div class="container-fluid">
+		            <div class="navbar-header">
+		            	<button type ="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+		            		<span class="icon-bar" ></span>
+		            		<span class="icon-bar"></span>
+		            		<span class="icon-bar"></span>
+		            	</button>
+		                <a href="{% url 'index' %}" class="navbar-brand">Student's Log</a>
+		            </div>
+
+		            <!-- Menu Stuff -->
+		            <div class="collapse navbar-collapse" id="mainNavBar">
+		                <ul class="nav navbar-nav">
+		            	{% if user.is_authenticated %}
+		               		<li class="dropdown">
+		                		<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }}'s Profile <span class="caret"></span></a>
+		                		<ul class="dropdown-menu">
+		                			<li><a href="#">Update Account</a></li>
+		                			<li><a href="{% url 'change_password' %}">Change Password</a></li>
+		               			</ul>
+		               		</li>
+		               		{% endif %}
+		               		{% if request.user.user_type == 'LECTURER' %}
+		               		<li class="dropdown">
+		                		<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }}'s Subjects <span class="caret"></span></a>
+		                		<ul class="dropdown-menu">
+		                			{% for subject in subjects %}
+		                			<li><a href="#">{{ subject.name }}</a></li>
+		                			{% endfor %}
+		                			<!-- Have to think on about how  I'm going to define the subjects -->
+
+		               			</ul> 
+		               		</li>
+		               			<li><a href="{% url 'upload' %}">Upload Content</a></li> 
+		               		{% endif %}
+		               			<li><a href="#">Forums</a></li>
+		                   		<li><a href="{% url 'contact_us' %}">Contact Us</a></li>
+		                   	</ul>
+		                   	<ul class="nav navbar-nav navbar-right">
+			                    <li><a href="{% url 'logout' %}">Logout</a></li>
+			                </ul>
+			           
+			            </div>
+			        </div>
+			    </nav>
+		    	{% block body_block %}
+		    	{% endblock %}
+		</body>
+	</html>

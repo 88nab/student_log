@@ -1,0 +1,18 @@
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+<div>
+       <h1>Contact Us</h1>
+    </div>
+    <div class="neat">  
+<form method="post" onsubmit="success()">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="form-actions">
+      <button type="submit">Send</button>
+    </div>
+</form>
+
+</div> 
+{% endblock %}

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+
+	<h1>Logged Out</h1>
+	<p>You are now logged out.</p>
+
+	<a href="{% url 'login' %}">To log back in, click here</a>
+
+{% endblock %}
