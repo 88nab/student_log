@@ -99,7 +99,7 @@ def upload(request):
 		form = UploadForm(request.POST, request.FILES)
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect('/success/url/')
+			return redirect('index')
 	else:
 		form = UploadForm()  
 	return render(request, 'log/upload.html', {'form': form})

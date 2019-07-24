@@ -40,7 +40,7 @@
 		               		{% endif %}
 		               		{% if request.user.user_type == 'LECTURER' %}
 		               		<li class="dropdown">
-		                		<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }}'s Subjects <span class="caret"></span></a>
+		                		<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }}'s Uploads <span class="caret"></span></a>
 		                		<ul class="dropdown-menu">
 		                			{% for subject in subjects %}
 		                			<li><a href="#">{{ subject.name }}</a></li>

@@ -2,15 +2,19 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django import forms
 from django.utils import timezone
+from django.conf import settings
+from django.db.models import Q
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django_currentuser.db.models import CurrentUserField
 
 # Create your models here.
 
-USER_TYPE_CHOICES = (
+class CustomUser(AbstractUser):
+	USER_TYPE_CHOICES = (
 		('STUDENT', 'Student'),
 		('LECTURER', 'Lecturer'),
 	)
-
-class CustomUser(AbstractUser):
 	email = models.EmailField(max_length=70, unique=True)
 	first_name = models.CharField(max_length=50)
 	last_name = models.CharField(max_length=50)
@@ -21,68 +25,120 @@ class CustomUser(AbstractUser):
 	# 	unique_together = (('email', 'user_type'))
 
 	def __str__(self):
-		return self.user_type
+		return self.username
 
-class Subject(models.Model):
-	name = models.CharField(max_length=128) 
-	# Not suure if I need to define the subject
-	lecturer_email = CustomUser.objects.select_related('user_type').filter(user_type='Lecturer')
+# class Profile(models.Model):
+# 	user=models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 
-class Student(models.Model):
-	student_email = CustomUser.objects.select_related('user_type').filter(user_type='Student')
-	journalID = models.AutoField(primary_key=True)
+# @receiver(post_save,sender=CustomUser)
+# def create_profile(sender, instance, created, **kwargs):
+# 	if created:
+# 		CustomUser.objects.created(user=instance)
+# @receiver(post_save, sender=CustomUser)
+# def save_profile(sender, instance, **kwargs):
+# 	instance.CustomUser.save()
+
+
+# class StudentProfile(models.Model):
+# 	profile=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
+
+# class Subject(models.Model):
+# 	lecturer = models.ForeignKey(CustomUser)
+# 	name = models.CharField(max_length=128, blank=True) 
+	# lecturer_email = CustomUser.objects.select_related('user_type').filter(user_type='LECTURER')
+	
+	# class Meta:
+	# 	db_table = 'lecturer_user'
+
+	# def __str__(self):
+	# 	return self.lecturer
 
 class Video(models.Model):
 	videoID = models.AutoField(primary_key=True)
-	videoDescription = models.CharField(max_length=250, default="xxx")
 	videoFile = models.FileField(upload_to='videos/', null=True, verbose_name="")
+	videoDescription = models.CharField(max_length=250)
+	upload_time = models.DateTimeField(default=timezone.now)
+	uploader = CurrentUserField()
 	views = models.IntegerField(default=0)
 	likes = models.IntegerField(default=0)
 
-	def __str__(self):
-		return self.videoID + ":" + str(self.videoFile)
+	# def save_model(self, request, obj, form, change):
+	# 	obj.added_by = request.user
+	# 	super().save_model(request, obj, form, change)
 
-class Journal(models.Model):
-	student= models.ForeignKey(Student)
-	videoID = models.ForeignKey(Video)
-	# journalID
-	time_saved = models.DateTimeField(default=timezone.now)
-	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-	description = models.CharField(max_length=9999, null=True)
+	# def __str__(self):
+	# 	return self.videoID + ":" + str(self.videoFile)
 
-class Forum(models.Model):
-	videoID = models.ForeignKey(Video)
-	author_email = models.ForeignKey(Student)
-	time_posted = models.DateTimeField(default=timezone.now)
-	comment = models.CharField(max_length=5000, null=True)
+# class Journal(models.Model):
+# 	# student= models.ForeignKey(Student)
+# 	videoID = models.ForeignKey(Video)
+# 	journalID = models.AutoField(primary_key=True)
+# 	time_saved = models.DateTimeField(default=timezone.now)
+# 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+# 	description = models.CharField(max_length=9999, null=True)
+
+# class Student(models.Model):
+# 	student = models.OneToOneField(CustomUser)
+# 	# student_email = CustomUser.objects.select_related('user_type').filter(user_type='STUDENT')
+# 	journalID = models.ForeignKey(Journal)
+	
+	# class Meta:
+	# 	db_table = 'student_user'
+
+	# def __str__(self):
+	# 	return self.student
+
+# class Video(models.Model):
+# 	videoID = models.AutoField(primary_key=True)
+# 	videoDescription = models.CharField(max_length=250)
+# 	videoFile = models.FileField(upload_to='videos/', null=True, verbose_name="")
+# 	views = models.IntegerField(default=0)
+# 	likes = models.IntegerField(default=0)
+
+# 	def __str__(self):
+# 		return self.videoID + ":" + str(self.videoFile)
+
+# class Journal(models.Model):
+# 	# student= models.ForeignKey(Student)
+# 	videoID = models.ForeignKey(Video)
+# 	journalID = models.AutoField(primary_key=True)
+# 	time_saved = models.DateTimeField(default=timezone.now)
+# 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+# 	description = models.CharField(max_length=9999, null=True)
+
+# class Forum(models.Model):
+# 	videoID = models.ForeignKey(Video)
+# 	author_email = models.ForeignKey(Student)
+# 	time_posted = models.DateTimeField(default=timezone.now)
+# 	comment = models.CharField(max_length=5000, null=True)
 
 
-class Quiz(models.Model):
-	quizID = models.AutoField(primary_key=True)
-	# quiz_questions =
-	# quiz_answers = 
+# class Quiz(models.Model):
+# 	quizID = models.AutoField(primary_key=True)
+# 	# quiz_questions =
+# 	# quiz_answers = 
 
-	class Meta:
-		verbose_name_plural = 'Quizzes'
+# 	class Meta:
+# 		verbose_name_plural = 'Quizzes'
 
-	def __str__(self):
-		return self.quizID
-
-
-class QuizResult(models.Model):
-	quizID = models.ForeignKey(Quiz)
-	studentID = models.ForeignKey(Student)
-	time_taken = models.DateTimeField(default=timezone.now)
-	result = models.IntegerField(default=0)
+# 	def __str__(self):
+# 		return self.quizID
 
 
+# class QuizResult(models.Model):
+# 	quizID = models.ForeignKey(Quiz)
+# 	studentID = models.ForeignKey(Student)
+# 	time_taken = models.DateTimeField(default=timezone.now)
+# 	result = models.IntegerField(default=0)
 
-class Upload(models.Model):
-	videoID = models.ForeignKey(Video)
-	lecturer_email = models.ForeignKey(Subject)
-	quizID = models.ForeignKey(Quiz)
-	upload_time = models.DateTimeField(default=timezone.now)
-	description = models.CharField(max_length=9999, null=True)
-	tag = models.CharField(max_length=25)
+
+
+# class Upload(models.Model):
+# 	# videoID = models.ForeignKey(Video)
+# 	# lecturer_email = models.ForeignKey(Subject)
+# 	# quizID = models.ForeignKey(Quiz)
+# 	upload_time = models.DateTimeField(default=timezone.now)
+# 	description = models.CharField(max_length=9999, null=True)
+# 	tag = models.CharField(max_length=25)
 
 
