@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_currentuser.db.models import CurrentUserField
+from django.template.defaultfilters import slugify
 
 # Create your models here.
 
@@ -26,6 +27,24 @@ class CustomUser(AbstractUser):
 
 	def __str__(self):
 		return self.username
+
+
+class Subject(models.Model):
+	name = models.CharField(max_length=250, unique=True)
+	views = models.IntegerField(default=0)
+	likes=models.IntegerField(default=0)
+	slug = models.SlugField(unique=True)
+	uploader = CurrentUserField()
+
+
+	def save(self, *args, **kwargs):
+		self.slug= slugify(self.name)
+		super(Subject, self).save(*args, **kwargs)
+
+	def __str__(self):
+		return self.name
+
+
 
 # class Profile(models.Model):
 # 	user=models.OneToOneField(CustomUser, on_delete=models.CASCADE)
@@ -61,6 +80,7 @@ class Video(models.Model):
 	uploader = CurrentUserField()
 	views = models.IntegerField(default=0)
 	likes = models.IntegerField(default=0)
+	subject = models.ForeignKey(Subject)
 
 	# def save_model(self, request, obj, form, change):
 	# 	obj.added_by = request.user

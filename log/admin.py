@@ -15,7 +15,10 @@ class StudentAdmin(admin.ModelAdmin):
 	list_display= ('student', 'journalID')
 
 class VideoAdmin(admin.ModelAdmin):
-	list_display=('videoID', 'videoFile', 'uploader')
+	list_display=('videoID', 'videoFile', 'uploader', 'subject')
+
+class SubjectAdmin(admin.ModelAdmin):
+	list_display=('name', 'uploader')
 
 # class ProfileAdmin(admin.ModelAdmin):
 # 	list_display=('user')
@@ -33,4 +36,4 @@ admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Video, VideoAdmin)
 # admin.site.register(Student, StudentAdmin)
 # admin.site.register(StudentProfile)
-# admin.site.register(Subject, SubjectAdmin)
+admin.site.register(Subject, SubjectAdmin)

@@ -45,8 +45,15 @@ def register_profile(request):
 			user_profile.user = request.user 
 			user_profile.save()
 			print(user_profile.user_type)
-			
-			return redirect('index') 
+			messages.info(request, "Thank you for registering with Student's Log. You are now logged in.")
+			user_profile = authenticate(username=form.cleaned_data['username'],
+				password=form.cleaned_data['password1'],
+				user_type=form.cleaned_data['user_type'],)
+			login(request, user_profile)
+			if user_profile.user_type=='STUDENT':
+				return redirect('index') 
+			else:
+				return redirect('add_subject')
 		else: 
 			print(form.errors)
 
@@ -80,7 +87,7 @@ def change_password(request):
 			user = form.save()
 			update_session_auth_hash(request, user)  # Important!
 			messages.success(request, 'Your password was successfully updated!')
-			return redirect('change_password')
+			return redirect('index')
 		else:
 			messages.error(request, 'Please correct the error below.')
 	else:
@@ -103,6 +110,20 @@ def upload(request):
 	else:
 		form = UploadForm()  
 	return render(request, 'log/upload.html', {'form': form})
+
+def add_subject(request):
+	form = SubjectForm()
+	if request.method == 'POST':
+		form = SubjectForm(request.POST)
+
+		if form.is_valid():
+			form.save(commit=True)
+			return index(request)
+
+		else:
+			print(form.errors)
+
+	return render(request, 'log/add_subject.html', {'form': form})
 
 
 
