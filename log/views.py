@@ -101,15 +101,26 @@ def user_logout(request):
 	logout(request)
 	return render(request, 'log/logout.html', context={})
 
-def upload(request):
+def upload(request, subject_name_slug):
+	try:
+		subject= Subject.objects.get(slug=subject_name_slug)
+	except Subject.DoesNotExist:
+		subject = None
+
+	form = UploadForm()
 	if request.method == 'POST':
 		form = UploadForm(request.POST, request.FILES)
 		if form.is_valid():
-			form.save()
-			return redirect('index')
+			if subject:
+				video=form.save(commit=False)
+				video.subject=subject
+				video.views=0
+				video.save()
+			return show_subject(request, subject_name_slug)
 	else:
-		form = UploadForm()  
-	return render(request, 'log/upload.html', {'form': form})
+		print(form.errors) 
+	context_dict={'form': form, 'subject': subject}
+	return render(request, 'log/upload.html', context_dict)
 
 def add_subject(request):
 	form = SubjectForm()
@@ -125,8 +136,22 @@ def add_subject(request):
 
 	return render(request, 'log/add_subject.html', {'form': form})
 
+def show_subject(request, subject_name_slug):	
+	context_dict = {}
 
+	try:
+		subject = Subject.objects.get(slug=subject_name_slug)
+		videos = Video.objects.filter(subject=subject)
+		context_dict['videos'] = videos
+		context_dict['subject'] = subject
+	except Subject.DoesNotExist:
+		context_dict['videos'] = None
+		context_dict['subject'] = None
+	return render(request, 'log/subject.html', context_dict)
 
+def video_test(request):
+	context_dict= {}
+	return render(request, 'log/video_test.html', context_dict)
 
 
 

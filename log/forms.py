@@ -22,10 +22,11 @@ class UploadForm(forms.ModelForm):
 	# description = forms.CharField(widget=forms.Textarea)
 	# tags = forms.CharField(required=True)
 	# quiz = forms.CharField(required=True)
+	
 
 	class Meta:
 		model = Video
-		exclude = ('videoID', 'uploader', 'upload_time','views', 'likes')
+		exclude = ('videoID', 'uploader', 'upload_time','views', 'likes', 'subject')
 
 	# def save(self):
 	# 	video = self.cleaned_data['video']

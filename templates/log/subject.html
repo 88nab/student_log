@@ -1,0 +1,25 @@
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+	
+{% block body_block %}
+	{% if subject %}
+		<h1>{{ subject.name }}</h1>
+		
+		{% if videos %}
+			<ul>
+			{% for video in videos %}
+				<li><a href="#">Video goes here</a>
+				</li>
+			{% endfor %}
+			</ul>
+		{% else %}	
+			<strong>No videos currently in {{ subject.name }}.</strong>
+		{% endif %}
+		<div>
+			<a href="{% url 'upload' %}">Add a Video</a>
+		</div>
+	{% else %}
+		The specified subject does not exist!
+	{% endif %}
+{% endblock %}
