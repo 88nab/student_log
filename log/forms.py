@@ -44,5 +44,9 @@ class SubjectForm(forms.ModelForm):
 		model = Subject
 		fields = ('name',)
 
+class JournalCreatorForm(forms.ModelForm):
 
+	class Meta:
+		model = JournalCreator  
+		exclude = ('student', 'journalID',)
 	

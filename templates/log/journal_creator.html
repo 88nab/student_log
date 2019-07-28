@@ -1,0 +1,25 @@
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+
+<div>
+	<h2>Create your journal!</h2>
+	<p>By signing up to this service and creating a journal, you will now be able to store timestamps and create your own tailored study aid. Simply name your journal to begin.</p>
+	
+	
+
+		<form id="journal_creator_form" method="post" action="{% url 'journal_creator' %}">
+				{% csrf_token %}
+				{% for hidden in form.hidden_fields %}
+					{{ hidden }}
+				{% endfor %}
+				{% for field in form.visible_fields %}
+					{{ field.errors }}
+					{{ field.help_text }}
+					{{ field }}
+				{% endfor %}
+				<input type="submit" name="submit" value="Create Journal"/>
+			</form>
+	</div>
+{% endblock %}

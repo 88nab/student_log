@@ -1,25 +1,28 @@
 {% extends 'log/base.html' %}
 {% load staticfiles %}
-
 	
 {% block body_block %}
+
 	{% if subject %}
-		<h1>{{ subject.name }}</h1>
+		<h2>{{ subject.name }}</h2>
 		
 		{% if videos %}
 			<ul>
-			{% for video in videos %}
-				<li><a href="#">Video goes here</a>
+			{% for v in videos %}
+				<li><a href="#">{{ v.videoDescription }}</a>
 				</li>
 			{% endfor %}
 			</ul>
 		{% else %}	
-			<strong>No videos currently in {{ subject.name }}.</strong>
+			<strong>No videos uploaded to this category.</strong>
 		{% endif %}
+		{% if request.user.user_type == 'LECTURER' %}
 		<div>
-			<a href="{% url 'upload' %}">Add a Video</a>
+			<a href= "{% url 'upload' subject.slug %}">Upload a video</a>
 		</div>
+		{% endif %}
 	{% else %}
 		The specified subject does not exist!
 	{% endif %}
+
 {% endblock %}

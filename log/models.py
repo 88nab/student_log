@@ -82,6 +82,23 @@ class Video(models.Model):
 	likes = models.IntegerField(default=0)
 	subject = models.ForeignKey(Subject)
 
+class JournalCreator(models.Model):
+	student = CurrentUserField()
+	journalID = models.AutoField(primary_key=True)
+	journal_name = models.CharField(max_length=50, unique=True)
+
+
+class JournalContent(models.Model):
+	student = CurrentUserField
+	journalID = models.ForeignKey(JournalCreator)
+	videoID = models.ForeignKey(Video)
+	time_saved = models.DateTimeField(default=timezone.now)
+	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+	description = models.CharField(max_length=9999, null=True)
+
+
+
+
 	# def save_model(self, request, obj, form, change):
 	# 	obj.added_by = request.user
 	# 	super().save_model(request, obj, form, change)

@@ -11,11 +11,12 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 
+
 @login_required 
 def index(request):
 	user_type = CustomUser.objects.values('user_type')
-	context_dict = {'user_type': user_type}
-	response = render(request, 'log/index.html', context=context_dict)
+	subjects = Subject.objects.all().order_by('uploader')
+	response = render(request, 'log/index.html', {'user_type': user_type, 'subjects':subjects})
 	return response
 
 def user_login(request):
@@ -51,7 +52,7 @@ def register_profile(request):
 				user_type=form.cleaned_data['user_type'],)
 			login(request, user_profile)
 			if user_profile.user_type=='STUDENT':
-				return redirect('index') 
+				return redirect('journal_creator') 
 			else:
 				return redirect('add_subject')
 		else: 
@@ -104,6 +105,12 @@ def user_logout(request):
 def upload(request, subject_name_slug):
 	try:
 		subject= Subject.objects.get(slug=subject_name_slug)
+		current_user = request.user.username
+		subject_details = Subject.objects.values('uploader')
+		# print (current_user.)
+		# print (subject_details.query)
+		# if subject_details != current_user:
+		# 	return HttpResponse('You cannot upload content to this subject. Please select one of your own subjects.')
 	except Subject.DoesNotExist:
 		subject = None
 
@@ -153,6 +160,20 @@ def video_test(request):
 	context_dict= {}
 	return render(request, 'log/video_test.html', context_dict)
 
+
+def journal_creator(request):
+	form = JournalCreatorForm()
+	if request.method == 'POST':
+		form = JournalCreatorForm(request.POST)
+
+		if form.is_valid():
+			form.save(commit=True)
+			return index(request)
+
+		else:
+			print(form.errors)
+
+	return render(request, 'log/journal_creator.html', {'form': form})
 
 
 
