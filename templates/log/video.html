@@ -5,7 +5,7 @@
 
 
 <div class ="video-player">
-		<video id='my-video' class='video-js' controls preload='auto' width='750' height='500'data-setup='{}'src="{{v.videoFile.path}}"></video>
+		<video id='my-video' class='video-js' controls preload='auto' width='750' height='500'data-setup='{}'src="{{MEDIA_URL}}{{v.videoFile.name}}"></video>
   </video>
 </div>
 
@@ -40,7 +40,7 @@
                 <center>
                     <h1>Post a Comment</h1>
                     <form id="comment_form" method="post" action="#">
-                    	<!-- work outwhat to put in action -->
+                    	<!-- work out what to put in action -->
                         {% csrf_token %}
                         {% for hidden in form.hidden_fields %}
                         {{ hidden }}

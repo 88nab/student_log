@@ -9,7 +9,7 @@
 		{% if videos %}
 			<ul>
 			{% for v in videos %}
-				<video id='my-video' class='video-js' width='250' height='200' data-setup='{}'src="{{v.videoFile.path}}"></video>
+				<video id='my-video' class='video-js' width='250' height='200' data-setup='{}'src="{{MEDIA_URL}}{{v.videoFile.name}}"></video>
 				<br>
 				<p>{{ v.videoDescription }}</p>
 				{% if request.user.user_type == 'LECTURER' %}
