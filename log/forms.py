@@ -4,8 +4,6 @@ from log.models import *
 
 
 class CustomUserCreationForm(UserCreationForm):
-	# email = forms.EmailField(required=True)
-	# password = forms.CharField(widget=forms.PasswordInput())
 
 	class Meta(UserCreationForm):
 		model = CustomUser
@@ -22,7 +20,6 @@ class UploadForm(forms.ModelForm):
 	# description = forms.CharField(widget=forms.Textarea)
 	# tags = forms.CharField(required=True)
 	# quiz = forms.CharField(required=True)
-	
 
 	class Meta:
 		model = Video
@@ -49,4 +46,16 @@ class JournalCreatorForm(forms.ModelForm):
 	class Meta:
 		model = JournalCreator  
 		exclude = ('student', 'journalID',)
+
+class CommentForm(forms.ModelForm):
+
+	def __init__(self, *args, **kwargs):
+		self.user = kwargs.pop('user', None)
+		super(CommentForm, self).__init__(*args, **kwargs)
+
+	comment = forms.CharField(max_length=2000, widget=forms.Textarea(attrs={'cols': 60, 'rows': 3}))
+
+	class Meta:
+		model = Comment
+		fields = ('user', 'video', 'comment',)
 	

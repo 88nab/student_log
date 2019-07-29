@@ -14,4 +14,12 @@ def videos(request):
 
 	return {
 		'vids': vids,
+	}	
+
+def comments(request):
+	from log.models import Comment 
+	vids = Comment.objects.all()
+
+	return {
+		'comments': comments,
 	}

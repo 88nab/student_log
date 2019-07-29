@@ -9,8 +9,14 @@
 		{% if videos %}
 			<ul>
 			{% for v in videos %}
-				<li><a href="#">{{ v.videoDescription }}</a>
-				</li>
+				<video id='my-video' class='video-js' width='250' height='200' data-setup='{}'src="{{v.videoFile.path}}"></video>
+				<br>
+				<p>{{ v.videoDescription }}</p>
+				{% if request.user.user_type == 'LECTURER' %}
+				<a href="#">View Video Stats</a>
+				{% else %}
+				<a href="{% url 'show_video' subject.slug v.videoID %}">View Video</a>
+				{% endif %}
 			{% endfor %}
 			</ul>
 		{% else %}	

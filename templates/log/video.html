@@ -1,0 +1,60 @@
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+
+
+<div class ="video-player">
+		<video id='my-video' class='video-js' controls preload='auto' width='750' height='500'data-setup='{}'src="{{v.videoFile.path}}"></video>
+  </video>
+</div>
+
+	<div class="quiz-bar">
+
+
+	</div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <center>
+                    <br><br>
+                    <h1>Comments</h1><br>
+                    <div class="comment_section">
+                        {% if comments %}
+
+                        {% for comment in comments %}
+
+                        <p>{{ comment.comment }}<br></p>
+                        <b> - {{ comment.user }}</b><br></p>
+                        <p id="comment-font"><i>{{ comment.date_posted }}</i><br></p>
+                        {% endfor %}
+                        {% else %}
+                        <p id="No_comments">Nobody has commented on this video.</p>
+                        {% endif %}
+                        <br><br>
+
+
+                    </div>
+                </center>
+                
+                <center>
+                    <h1>Post a Comment</h1>
+                    <form id="comment_form" method="post" action="#">
+                    	<!-- work outwhat to put in action -->
+                        {% csrf_token %}
+                        {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                        {{ hidden.errors }}
+                        {% endfor %}
+                        {% for field in form.visible_fields %}
+                        {{ field.errors }}
+                        {{ field.help_text }}<br>
+                        {{ field }}<br><br>
+                        {% endfor %}
+
+                        <input type="submit" name="submit" value="Leave a Comment" class="btn"/><br><br>
+                    </form>
+                </center>
+                <br><br><br>
+
+              {% endblock %}

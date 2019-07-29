@@ -21,6 +21,6 @@ urlpatterns = [
 	# url(r'^subject/(?P<subject_name_slug>[\w\-]+)/add_quiz/$', views.add_quiz, name='add_quiz'),
     url(r'^journal_creator/$', views.journal_creator, name='journal_creator'),
     url(r'^video_test/$', views.video_test, name='video_test'),
-
+    url(r'^subject/(?P<subject_name_slug>[\w\-]+)/video/(?P<videoID>\d+)/$', views.show_video, name='show_video'),
 
 ]

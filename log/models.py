@@ -96,8 +96,21 @@ class JournalContent(models.Model):
 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	description = models.CharField(max_length=9999, null=True)
 
+class Comment(models.Model):
+	video = models.ForeignKey(Video)
+	user = CurrentUserField()
+	def __unicode__(self):
+		return self.name
+	comment = models.CharField(max_length=2000, null=True)
+	date_posted = models.DateTimeField(auto_now=True)
+
+	def __str__(self):
+		return self.comment
 
 
+
+
+		
 
 	# def save_model(self, request, obj, form, change):
 	# 	obj.added_by = request.user

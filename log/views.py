@@ -175,7 +175,42 @@ def journal_creator(request):
 
 	return render(request, 'log/journal_creator.html', {'form': form})
 
+def show_video(request, *args, **kwargs):
+		context_dict = {}
 
+		# try:
+		# 	videos = Video.objects.get(slug=videoID)
+		# 	comment = Comment.objects.filter('videoID').order_by('-date_posted')
+		# 	form = CommentForm()
+		# 	context_dict['videos'] = videos
+		# 	context_dict['comment'] =  comment
+		# except Subject.DoesNotExist:
+		# 	context_dict['videos'] = None
+		# 	context_dict['comment'] = None
+
+
+		# if request.method == 'POST':
+
+		# 	form.videos = videos
+		# 	form = CommentForm(request.POST)
+
+		# 	if form.is_valid():
+		# 		getInfo = form.save(commit=False)
+		# 		getInfo.videos=Video.objects.get(videoID=request.videoID)
+		# 		getInfo.user = request.user
+		
+		# 		getInfo.save()
+
+		# 		info_dict = {"comment": getInfo.comment, "user": request.user.username,"date": getInfo.date_posted.strftime('%B %d, %Y, %I:%M %p')}
+		# 		return HttpResponse(json.dumps(info_dict), content_type="application/json")
+
+			# else:
+			# 	print(form.errors)
+
+		
+
+		# context_dict = {'form': form, 'videos': videos, 'comments':comments}
+		return render(request, 'log/video.html', context_dict)
 
 
 
