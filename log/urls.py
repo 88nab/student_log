@@ -21,7 +21,9 @@ urlpatterns = [
 	# url(r'^subject/(?P<subject_name_slug>[\w\-]+)/add_quiz/$', views.add_quiz, name='add_quiz'),
     url(r'^journal_creator/$', views.journal_creator, name='journal_creator'),
     url(r'^subject/(?P<subject_name_slug>[\w\-]+)/video/(?P<videoID>\d+)/$', views.show_video, name='show_video'),
-    # url(r'^subject/<slug:subject_name_slug>/video/<int:videoID>/$', views.show_video, name='show_video'),
     url(r'^forum/$', views.forum_view, name='forum_view'),
     url(r'^stats/video/(?P<videoID>\d+)/$', views.video_stats, name='video_stats'),
+    url(r'^viewer/video/(?P<videoID>\d+)/$', views.video_test, name='video_test'),
+
+
 ]

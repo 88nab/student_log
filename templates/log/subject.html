@@ -4,28 +4,29 @@
 {% block body_block %}
 
 	{% if subject %}
-		<h2>{{ subject.name }}</h2>
+		<center><h2>{{ subject.name }}</h2></center>
 		
 		{% if videos %}
-			<ul>
+			<center><ul>
 			{% for v in videos %}
 				<video id='my-video' class='video-js' width='250' height='200' data-setup='{}'src="{{MEDIA_URL}}{{v.videoFile.name}}"></video>
 				<br>
 				<p>{{ v.videoDescription }}</p>
 				{% if request.user.user_type == 'LECTURER' %}
 				<a href="{% url 'video_stats' v.videoID %}">View Video Stats</a>
+				<br>
 				<a href="#">Upload a Quiz</a>
 				{% else %}
-				<a href="{% url 'show_video' subject.slug v.videoID %}">View Video</a>
+				<a href="{% url 'video_test' v.videoID %}">View Video</a>
 				{% endif %}
 			{% endfor %}
-			</ul>
+			</ul></center>
 		{% else %}	
 			<strong>No videos uploaded to this category.</strong>
 		{% endif %}
 		{% if request.user.user_type == 'LECTURER' %}
 		<div>
-			<a href= "{% url 'upload' subject.slug %}">Upload a video</a>
+			<center><strong><h3><a href= "{% url 'upload' subject.slug %}">Upload another video</a></h3></strong></center>
 		</div>
 		{% endif %}
 	{% else %}

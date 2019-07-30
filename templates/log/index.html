@@ -6,11 +6,11 @@
 
 	{% block body_block %}
 	<div>
-		 <h2><strong>Most Viewed Videos</strong></h2>
+		 <center><h2><strong>Most Viewed Videos</strong></h2></center>
 	</div>
 
 	{% if videos %}
-	<ul class = "most-viewed-vids">
+	<center><ul class = "most-viewed-vids">
 		{% for video in  videos %}
 		<video id='my-video' class='video-js' width='250' height='200' data-setup='{}'src="{{MEDIA_URL}}{{video.videoFile.name}}"></video>
 		<br>
@@ -24,7 +24,7 @@
 		{% endif %}
 		{% endfor %}
 	{% endif %}
-	</ul>
+	</ul></center>
 	<!-- <script type="text/javascript" src="{% static 'js/likes.js' %}"></script> -->
 	{% endblock %}
 	</html>

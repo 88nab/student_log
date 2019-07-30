@@ -4,6 +4,9 @@
 
 	{% block body_block %}
 
+
+	<center><video id='my-video' class='video-js' controls preload='auto' width='400' height='350' data-setup='{}'src="{{MEDIA_URL}}{{video.videoFile.name}}"></video>
+	<br>
 	Video ID: {{video.videoID}}
 	<br>
 	Filename: {{video.videoFile}}
@@ -17,5 +20,6 @@
 	Likes: {{video.likes}}
 	<br>
 	Subject: {{video.subject}}
-	<br>
+	<br></center>
+
 	{% endblock %}
