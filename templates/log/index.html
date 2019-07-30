@@ -18,7 +18,7 @@
 <!-- 		<button class="like" data-videoid="{{video.likes}}" type="submit" onclick="location.reload(true);">Like</button> -->
 		<br>
 		{% if request.user.user_type == 'STUDENT' %}
-		<a href="#">To view this video, click here</a>
+		<a href="{% url 'video_test' video.videoID %}">To view this video, click here</a>
 		{% else %}
 		<a href="{% url 'video_stats' video.videoID %}">View Video Stats</a>
 		{% endif %}
