@@ -1,0 +1,21 @@
+{% extends 'log/base.html' %}
+
+{% load staticfiles %}
+
+	{% block body_block %}
+
+	Video ID: {{video.videoID}}
+	<br>
+	Filename: {{video.videoFile}}
+	<br>
+	Video Description: {{video.videoDescription}}
+	<br>
+	Uploaded by: {{video.uploader}}
+	<br>
+	Views: {{video.views}}
+	<br>
+	Likes: {{video.likes}}
+	<br>
+	Subject: {{video.subject}}
+	<br>
+	{% endblock %}

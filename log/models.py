@@ -81,6 +81,9 @@ class Video(models.Model):
 	views = models.IntegerField(default=0)
 	likes = models.IntegerField(default=0)
 	subject = models.ForeignKey(Subject)
+	
+	def __int__(self):
+		return self.videoID
 
 class JournalCreator(models.Model):
 	student = CurrentUserField()

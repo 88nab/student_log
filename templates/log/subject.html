@@ -13,7 +13,8 @@
 				<br>
 				<p>{{ v.videoDescription }}</p>
 				{% if request.user.user_type == 'LECTURER' %}
-				<a href="#">View Video Stats</a>
+				<a href="{% url 'video_stats' v.videoID %}">View Video Stats</a>
+				<a href="#">Upload a Quiz</a>
 				{% else %}
 				<a href="{% url 'show_video' subject.slug v.videoID %}">View Video</a>
 				{% endif %}

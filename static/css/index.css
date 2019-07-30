@@ -1,0 +1,12 @@
+ul.most-viewed-vids {
+	display: inline-block;
+}
+
+video.most-viewed-vids{
+	display: inline;
+}
+
+.table{
+	display: table;
+	margin: 0 auto;
+}

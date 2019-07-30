@@ -48,14 +48,18 @@ class JournalCreatorForm(forms.ModelForm):
 		exclude = ('student', 'journalID',)
 
 class CommentForm(forms.ModelForm):
-
 	def __init__(self, *args, **kwargs):
 		self.user = kwargs.pop('user', None)
+		# self.video = kwargs.pop('video', None)
 		super(CommentForm, self).__init__(*args, **kwargs)
+
 
 	comment = forms.CharField(max_length=2000, widget=forms.Textarea(attrs={'cols': 60, 'rows': 3}))
 
 	class Meta:
 		model = Comment
-		fields = ('user', 'video', 'comment',)
+		fields = ('comment',)
+
+
+
 	

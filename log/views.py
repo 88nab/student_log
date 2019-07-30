@@ -16,7 +16,9 @@ from django.contrib.auth.forms import PasswordChangeForm
 def index(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
-	response = render(request, 'log/index.html', {'user_type': user_type, 'subjects':subjects})
+	most_viewed=Video.objects.all().order_by('-views')[:5]
+	# most_liked=Video.objects.all().order_by('-likes')[:5]
+	response = render(request, 'log/index.html', {'videos': most_viewed,'user_type': user_type, 'subjects':subjects})
 	return response
 
 def user_login(request):
@@ -63,6 +65,10 @@ def register_profile(request):
 	return render(request, 'log/registration_form.html', context_dict)
 
 def contact_us(request):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+
+
 	if request.method == 'GET':
 		form = ContactForm()
 	else:
@@ -75,13 +81,15 @@ def contact_us(request):
 
 			send_mail(subject+" - " + email, message, email, ['catchhub1@gmail.com'])
 			return redirect('index')
-	return render(request, "log/contact_us.html", {'form': form})
+	return render(request, "log/contact_us.html", {'form': form, 'user_type': user_type, 'subjects':subjects})
 
 # Need to fix this
 def successView(request):
 	return HttpResponse('Success! Thank you for your message.')
 
 def change_password(request):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
 	if request.method == 'POST':
 		form = PasswordChangeForm(request.user, request.POST)
 		if form.is_valid():
@@ -94,7 +102,7 @@ def change_password(request):
 	else:
 		form = PasswordChangeForm(request.user)
 	return render(request, 'log/change_password.html', {
-		'form': form
+		'form': form, 'user_type': user_type, 'subjects':subjects
 	})
 
 @login_required
@@ -103,6 +111,8 @@ def user_logout(request):
 	return render(request, 'log/logout.html', context={})
 
 def upload(request, subject_name_slug):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
 	try:
 		subject= Subject.objects.get(slug=subject_name_slug)
 		current_user = request.user.username
@@ -126,10 +136,12 @@ def upload(request, subject_name_slug):
 			return show_subject(request, subject_name_slug)
 	else:
 		print(form.errors) 
-	context_dict={'form': form, 'subject': subject}
+	context_dict={'form': form, 'subject': subject, 'user_type': user_type, 'subjects':subjects}
 	return render(request, 'log/upload.html', context_dict)
 
 def add_subject(request):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
 	form = SubjectForm()
 	if request.method == 'POST':
 		form = SubjectForm(request.POST)
@@ -141,9 +153,11 @@ def add_subject(request):
 		else:
 			print(form.errors)
 
-	return render(request, 'log/add_subject.html', {'form': form})
+	return render(request, 'log/add_subject.html', {'form': form, 'user_type': user_type, 'subjects':subjects})
 
-def show_subject(request, subject_name_slug):	
+def show_subject(request, subject_name_slug):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')	
 	context_dict = {}
 
 	try:
@@ -151,14 +165,12 @@ def show_subject(request, subject_name_slug):
 		videos = Video.objects.filter(subject=subject)
 		context_dict['videos'] = videos
 		context_dict['subject'] = subject
+		context_dict['user_type']=user_type
+		context_dict['subjects']= subjects
 	except Subject.DoesNotExist:
 		context_dict['videos'] = None
 		context_dict['subject'] = None
 	return render(request, 'log/subject.html', context_dict)
-
-def video_test(request):
-	context_dict= {}
-	return render(request, 'log/video_test.html', context_dict)
 
 
 def journal_creator(request):
@@ -173,44 +185,105 @@ def journal_creator(request):
 		else:
 			print(form.errors)
 
-	return render(request, 'log/journal_creator.html', {'form': form})
+	return render(request, 'log/journal_creator.html', {'form': form, 'user_type': user_type, 'subjects':subjects})
 
-def show_video(request, *args, **kwargs):
+def show_video(request, subject_name_slug, videoID):
+	
+	# subject_name_slug, videoID
 		context_dict = {}
+		user_type = CustomUser.objects.values('user_type')
+		subjects = Subject.objects.all().order_by('uploader')
+		# selected_subject = Subject.objects.filter(subject_name_slug).order_by(videoID=selected_video)
+		# subject_name_slug = request.GET['slug']
+		# videoID = request.GET['videoID']
+		# selected_subject = request.GET.get('slug', None)
+		# selected_video = request.GET.get('videoID', None)
+		# video_detail = None
+		# video_id_integer = int(videoID)
+		
+		# vid_list = Video.objects.filter(videoID=video_id_integer)
+
+		# if len(vid_list) > 0:
+		# 	video_detail = vid_list[0]
+		# else:
+		# 	video_detail = None
 
 		# try:
-		# 	videos = Video.objects.get(slug=videoID)
-		# 	comment = Comment.objects.filter('videoID').order_by('-date_posted')
+		# 	subject = Subject.objects.get(slug=subject_name_slug)
+		# 	videos = Video.objects.get(videoID=videoID)
+		# 	comment = Comment.objects.filter(videoID=videoID).order_by('-date_posted')
 		# 	form = CommentForm()
-		# 	context_dict['videos'] = videos
 		# 	context_dict['comment'] =  comment
+
+		# 	if request.method == 'POST':
+		# 		form.videos = videos
+		# 		form = CommentForm(request.POST)
+
+		# 		if form.is_valid():
+		# 			getInfo = form.save(commit=False)
+		# 			getInfo.save()
+
+		# 			info_dict = {"comment": getInfo.comment, "date": getInfo.date_posted.strftime('%B %d, %Y, %I:%M %p')}
+		# 			return HttpResponse(json.dumps(info_dict), content_type="application/json",)
+
+		# 		else:
+		# 			print(form.errors)
+
 		# except Subject.DoesNotExist:
 		# 	context_dict['videos'] = None
 		# 	context_dict['comment'] = None
 
-
-		# if request.method == 'POST':
-
-		# 	form.videos = videos
-		# 	form = CommentForm(request.POST)
-
-		# 	if form.is_valid():
-		# 		getInfo = form.save(commit=False)
-		# 		getInfo.videos=Video.objects.get(videoID=request.videoID)
-		# 		getInfo.user = request.user
-		
-		# 		getInfo.save()
-
-		# 		info_dict = {"comment": getInfo.comment, "user": request.user.username,"date": getInfo.date_posted.strftime('%B %d, %Y, %I:%M %p')}
-		# 		return HttpResponse(json.dumps(info_dict), content_type="application/json")
-
-			# else:
-			# 	print(form.errors)
-
-		
-
-		# context_dict = {'form': form, 'videos': videos, 'comments':comments}
+		# context_dict = {'form': form,'videos': videos, 'comment':comment, 'user_type': user_type, 'subjects':subjects}
+		print(videoID)
+		xxx = int(videoID)
+		print(xxx)
+		try:
+			subject = Subject.objects.get(slug=subject_name_slug)
+			videos = Video.objects.get(videoID=int(videoID))
+			# context_dict= {'subject': subject, 'videos':videos, 'user_type': user_type, 'subjects': subjects}
+			context_dict['subject'] = subject
+			context_dict['videos'] = videos
+			context_dict['user_type']=user_type
+			context_dict['subjects']= subjects
+		except Subject.DoesNotExist:
+			context_dict['videos'] = None
+			context_dict['subject'] = None
 		return render(request, 'log/video.html', context_dict)
+
+def forum_view(request):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	response = render(request, 'log/forum.html', {'user_type': user_type, 'subjects':subjects})
+	return response
+
+# def like_video(request):
+# 	videoID =None
+# 	if request.method=='GET':
+# 		videoID= request.GET['videoID']
+# 	likes=0
+# 	if videoID:
+# 		video=Video.objects.get(id=int(videoID))
+# 		if video:
+# 			likes= video.likes + 1
+# 			video.likes =likes
+# 			video.save()
+# 		return HttpResponse(likes)
+
+def video_stats(request, videoID):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	context_dict={}
+	print(videoID)
+	try:
+		video = Video.objects.get(videoID=videoID)
+		context_dict['video']= video
+		context_dict['user_type']=user_type
+		context_dict['subjects']= subjects
+	except Video.DoesNotExist:
+		context_dict['video']= None
+
+	response = render(request, 'log/stats.html', context_dict)
+	return response
 
 
 

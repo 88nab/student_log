@@ -48,10 +48,13 @@
 									{% for s in subjects %}
 		                				<li><a href="{% url 'show_subject' s.slug %}">{{ s.name }}</a></li>
 		                			{% endfor %}
+		                			{% if user.user_type == 'LECTURER' %}
+		                			<li><a href="{% url 'add_subject' %}">Add a Subject</a></li>
+		                			{% endif %}
 		                		</ul>
 		                	</li>
 		                	<ul class="nav navbar-nav">
-		               			<li><a href="#">Forums</a></li>
+		               			<li><a href="{% url 'forum_view' %}">Forums</a></li>
 		                   		<li><a href="{% url 'contact_us' %}">Contact Us</a></li>
 		                   		</ul>
 		                   	</ul>

@@ -5,8 +5,26 @@
 {% load staticfiles %}
 
 	{% block body_block %}
-		 <body>
+	<div>
+		 <h2><strong>Most Viewed Videos</strong></h2>
+	</div>
 
-		 </body>
+	{% if videos %}
+	<ul class = "most-viewed-vids">
+		{% for video in  videos %}
+		<video id='my-video' class='video-js' width='250' height='200' data-setup='{}'src="{{MEDIA_URL}}{{video.videoFile.name}}"></video>
+		<br>
+		<p>{{video.videoDescription}}</p>
+<!-- 		<button class="like" data-videoid="{{video.likes}}" type="submit" onclick="location.reload(true);">Like</button> -->
+		<br>
+		{% if request.user.user_type == 'STUDENT' %}
+		<a href="#">To view this video, click here</a>
+		{% else %}
+		<a href="{% url 'video_stats' video.videoID %}">View Video Stats</a>
+		{% endif %}
+		{% endfor %}
+	{% endif %}
+	</ul>
+	<!-- <script type="text/javascript" src="{% static 'js/likes.js' %}"></script> -->
 	{% endblock %}
 	</html>
