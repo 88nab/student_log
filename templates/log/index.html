@@ -5,26 +5,33 @@
 {% load staticfiles %}
 
 	{% block body_block %}
-	<div>
-		 <center><h2><strong>Most Viewed Videos</strong></h2></center>
+	<div class="page-header text-center">
+		<br>
+		 <h1>Most Viewed Videos</h1>
 	</div>
-
+	<div class="container">
 	{% if videos %}
-	<center><ul class = "most-viewed-vids">
 		{% for video in  videos %}
-		<video id='my-video' class='video-js' width='250' height='200' data-setup='{}'src="{{MEDIA_URL}}{{video.videoFile.name}}"></video>
-		<br>
-		<p>{{video.videoDescription}}</p>
-<!-- 		<button class="like" data-videoid="{{video.likes}}" type="submit" onclick="location.reload(true);">Like</button> -->
-		<br>
-		{% if request.user.user_type == 'STUDENT' %}
-		<a href="{% url 'video_test' video.videoID %}">To view this video, click here</a>
-		{% else %}
-		<a href="{% url 'video_stats' video.videoID %}">View Video Stats</a>
-		{% endif %}
+		<div class="row">
+		<div class="col-lg-12 text-center">
+				<div class="well well-lg">
+				<ul class = "most-viewed-vids">
+				<video id='my-video' class='video-js' data-setup='{"fluid": true}'src="{{MEDIA_URL}}{{video.videoFile.name}}"></video>
+				<br>
+				<p><h4>{{video.videoDescription}}</h4></p>
+				<br>
+				{% if request.user.user_type == 'STUDENT' %}
+				<h3><a href="{% url 'video_test' video.videoID %}">To view this video, click here</a></h3>
+				{% else %}
+				<h3><a href="{% url 'video_stats' video.videoID %}">View Video Stats</a></h3>
+			</div>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
 		{% endfor %}
 	{% endif %}
-	</ul></center>
+</div>
+
 	<!-- <script type="text/javascript" src="{% static 'js/likes.js' %}"></script> -->
 	{% endblock %}
-	</html>

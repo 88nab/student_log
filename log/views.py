@@ -175,6 +175,8 @@ def show_subject(request, subject_name_slug):
 
 
 def journal_creator(request):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
 	form = JournalCreatorForm()
 	if request.method == 'POST':
 		form = JournalCreatorForm(request.POST)
