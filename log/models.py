@@ -92,7 +92,7 @@ class JournalCreator(models.Model):
 
 
 class JournalContent(models.Model):
-	student = CurrentUserField
+	student = CurrentUserField()
 	journalID = models.ForeignKey(JournalCreator)
 	videoID = models.ForeignKey(Video)
 	time_saved = models.DateTimeField(default=timezone.now)
@@ -109,6 +109,23 @@ class Comment(models.Model):
 
 	def __str__(self):
 		return self.comment
+
+class Note(models.Model):
+	student = CurrentUserField()
+	subject = models.ForeignKey(Subject)
+	title = models.CharField(max_length=50, unique=True)
+	slug = models.SlugField(unique=True)
+	created_on = models.DateTimeField(default=timezone.now)
+	note = models.TextField()
+
+
+
+	def save(self, *args, **kwargs):
+		self.slug= slugify(self.title)
+		super(Note, self).save(*args, **kwargs)
+
+	def __str__(self):
+		return self.title
 
 
 

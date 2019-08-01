@@ -1,0 +1,18 @@
+{% extends 'log/base.html' %}
+
+{% load staticfiles %}
+
+	{% block body_block %}
+	<div class="row">
+		<div class="col-lg-12 text-center">
+			<br><br>
+				<h3><br>
+				Note Title:</h3> {{note.title}}
+				<br>
+				<h3>Note Subject:</h3> {{note.subject}}
+				<br>
+				<h3>Note:</h3> {{note.note}}
+				<br>
+		</div>
+	</div>
+	{% endblock %}

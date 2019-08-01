@@ -60,6 +60,12 @@ class CommentForm(forms.ModelForm):
 		model = Comment
 		fields = ('comment',)
 
+class NoteForm(forms.ModelForm):
+
+	class Meta:
+		model = Note
+		exclude = ('student', 'journalID', 'slug', 'created_on',)
+
 
 
 	

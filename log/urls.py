@@ -24,6 +24,9 @@ urlpatterns = [
     url(r'^forum/$', views.forum_view, name='forum_view'),
     url(r'^stats/video/(?P<videoID>\d+)/$', views.video_stats, name='video_stats'),
     url(r'^viewer/video/(?P<videoID>\d+)/$', views.video_test, name='video_test'),
+    url(r'^(?P<username>[\w\-]+)/journal/$', views.show_journal, name='show_journal'),
+    url(r'^(?P<username>[\w\-]+)/journal/add_note/$', views.add_note, name='add_note'),
+    url(r'^journal/view_note/(?P<slug>[\w\-]+)/$', views.show_note, name='show_note'),
 
 
 ]

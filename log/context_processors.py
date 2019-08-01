@@ -18,8 +18,20 @@ def videos(request):
 
 def comments(request):
 	from log.models import Comment 
-	vids = Comment.objects.all()
+	comments = Comment.objects.all()
 
 	return {
 		'comments': comments,
 	}
+def notes(request):
+	from log.models import Note
+	notes = Note.objects.all()
+
+	return {
+		'notes': notes,
+	}
+
+
+
+
+	

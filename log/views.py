@@ -344,7 +344,7 @@ def show_video(request, subject_name_slug, videoID):
 	print(subject_name_slug)
 	context_dict={'user_type':user_type, 'subjects': subjects, 'videoID':videoID, 'subject_name_slug':subject_name_slug}
 	# print(video)
-	pass
+	
 	# try:
 	# 	context_dict['video']= video
 	# 	context_dict['subject']  = subject
@@ -354,3 +354,49 @@ def show_video(request, subject_name_slug, videoID):
 	# 	context_dict['video']= None
 	
 	return render(request, 'log/video.html', context_dict)
+
+def show_journal(request, username):
+	context_dict={}
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	notes = Note.objects.filter(student=request.user)
+	context_dict={'notes':notes, 'user_type':user_type, 'subjects': subjects, 'username': username}
+
+	return render(request, 'log/journal.html', context_dict)
+
+def add_note(request, username):
+	context_dict={}
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	form = NoteForm()
+	if request.method == 'POST':
+		form = NoteForm(request.POST)
+
+		if form.is_valid():
+			form.save(commit=True)
+			return index(request)
+
+		else:
+			print(form.errors)
+
+	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'username': username,}
+	return render(request, 'log/note_form.html', context_dict)
+
+
+def show_note(request, slug):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	context_dict={}
+
+	try:
+		note = Note.objects.get(slug=slug)
+		context_dict['note']= note
+		context_dict['user_type']=user_type
+		context_dict['subjects']= subjects
+	except Video.DoesNotExist:
+		context_dict['note']= None
+
+	response = render(request, 'log/note.html', context_dict)
+	return response
+
+

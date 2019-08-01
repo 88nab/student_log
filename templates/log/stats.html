@@ -5,10 +5,10 @@
 	{% block body_block %}
 	<div class="row">
 		<div class="col-lg-12">
-			
+			<br><br><br>
+			<div class="well text-center">
 			<video id='my-video' class='video-js vjs-big-play-centered' controls preload='auto'  data-setup='{"fluid":true}'src="{{MEDIA_URL}}{{video.videoFile.name}}"></video>
-		</div>
-		<div class="well text-center">
+		
 				<h4><br>
 				Video ID: {{video.videoID}}
 				<br>
@@ -26,4 +26,5 @@
 				<br></h4>
 			</div>
 		</div>
+	</div>
 	{% endblock %}
