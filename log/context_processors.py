@@ -31,6 +31,14 @@ def notes(request):
 		'notes': notes,
 	}
 
+def timestamps(request):
+	from log.models import JournalContent
+	timestamps= JournalContent.objects.all()
+
+	return {
+		'timestamps':timestamps,
+	}
+
 
 
 

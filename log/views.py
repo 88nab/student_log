@@ -133,6 +133,7 @@ def upload(request, subject_name_slug):
 				video=form.save(commit=False)
 				video.subject=subject
 				video.views=0
+				video.likes=0
 				video.save()
 			return show_subject(request, subject_name_slug)
 	else:
@@ -334,15 +335,15 @@ def video_test(request, videoID):
 # 	response = render(request, 'log/video.html', context_dict)
 # 	return response
 
-def show_video(request, subject_name_slug, videoID):
-	context_dict={}
-	user_type = CustomUser.objects.values('user_type')
-	subjects = Subject.objects.all().order_by('uploader')
-	# video = Video.objects.get(videoID=videoID)
-	# subject = Subject.objects.get(slug=subject_name_slug)
-	print(videoID)
-	print(subject_name_slug)
-	context_dict={'user_type':user_type, 'subjects': subjects, 'videoID':videoID, 'subject_name_slug':subject_name_slug}
+# def show_video(request, subject_name_slug, videoID):
+# 	context_dict={}
+# 	user_type = CustomUser.objects.values('user_type')
+# 	subjects = Subject.objects.all().order_by('uploader')
+# 	# video = Video.objects.get(videoID=videoID)
+# 	# subject = Subject.objects.get(slug=subject_name_slug)
+# 	print(videoID)
+# 	print(subject_name_slug)
+# 	context_dict={'user_type':user_type, 'subjects': subjects, 'videoID':videoID, 'subject_name_slug':subject_name_slug}
 	# print(video)
 	
 	# try:
@@ -353,14 +354,15 @@ def show_video(request, subject_name_slug, videoID):
 	# except Video.DoesNotExist:
 	# 	context_dict['video']= None
 	
-	return render(request, 'log/video.html', context_dict)
+	# return render(request, 'log/video.html', context_dict)
 
 def show_journal(request, username):
 	context_dict={}
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
 	notes = Note.objects.filter(student=request.user)
-	context_dict={'notes':notes, 'user_type':user_type, 'subjects': subjects, 'username': username}
+	timestamps = JournalContent.objects.filter(student=request.user)
+	context_dict={'notes':notes, 'timestamps': timestamps, 'user_type':user_type, 'subjects': subjects, 'username': username}
 
 	return render(request, 'log/journal.html', context_dict)
 
@@ -398,5 +400,24 @@ def show_note(request, slug):
 
 	response = render(request, 'log/note.html', context_dict)
 	return response
+
+def add_journal_content(request, videoID):
+	context_dict={}
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	video = Video.objects.get(videoID=videoID)
+	form = JournalContentForm()
+	if request.method == 'POST':
+		form = JournalContentForm(request.POST)
+
+		if form.is_valid():
+			form.save(commit=True)
+			return index(request)
+
+		else:
+			print(form.errors)
+
+	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'video': video,}
+	return render(request, 'log/journal_content_form.html', context_dict)
 
 

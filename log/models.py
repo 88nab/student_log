@@ -82,8 +82,8 @@ class Video(models.Model):
 	likes = models.IntegerField(default=0)
 	subject = models.ForeignKey(Subject)
 	
-	def __int__(self):
-		return self.videoID
+	def __str__(self):
+		return str(self.videoID)
 
 class JournalCreator(models.Model):
 	student = CurrentUserField()
@@ -93,11 +93,14 @@ class JournalCreator(models.Model):
 
 class JournalContent(models.Model):
 	student = CurrentUserField()
-	journalID = models.ForeignKey(JournalCreator)
 	videoID = models.ForeignKey(Video)
 	time_saved = models.DateTimeField(default=timezone.now)
 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	description = models.CharField(max_length=9999, null=True)
+	tags = models.CharField(max_length=25)
+
+
+
 
 class Comment(models.Model):
 	video = models.ForeignKey(Video)

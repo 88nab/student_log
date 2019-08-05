@@ -66,6 +66,16 @@ class NoteForm(forms.ModelForm):
 		model = Note
 		exclude = ('student', 'journalID', 'slug', 'created_on',)
 
+class JournalContentForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+		self.videoID = kwargs.pop('videoID', None)
+		# self.video = kwargs.pop('video', None)
+		super(JournalContentForm, self).__init__(*args, **kwargs)
+
+	class Meta:
+		model = JournalContent
+		exclude = ('student', 'time_saved',)
+
 
 
 	

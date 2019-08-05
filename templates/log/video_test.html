@@ -14,6 +14,7 @@
 					  </video>
 		  				<div class="quiz-bar">
 						</div>
+							<a href="{% url 'add_journal_content' video.videoID %}"><h3>Click here to save timecodes to your own journal to help you study and add tags to help others.</h3><br>
 							<h4>Unsure about the what you've seen? Try starting a <a href="{% url 'forum_view' %}">forum</a> to discuss with your peers.</h4>
 							<br><h5>If you're still unsure, contact the <a href="mailto:{{ video.uploader.email }}?subject=Student's Log Email Query">lecturer.</a></h5>
 						</div>

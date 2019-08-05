@@ -26,6 +26,9 @@ class JournalCreatorAdmin(admin.ModelAdmin):
 class NoteAdmin(admin.ModelAdmin):
 	list_display=('student', 'title')
 
+class JournalContentAdmin(admin.ModelAdmin):
+	list_display=('student','videoID', 'timestamp')
+
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
@@ -40,3 +43,4 @@ admin.site.register(Video, VideoAdmin)
 admin.site.register(Subject, SubjectAdmin)
 admin.site.register(JournalCreator, JournalCreatorAdmin)
 admin.site.register(Note, NoteAdmin)
+admin.site.register(JournalContent, JournalContentAdmin)
