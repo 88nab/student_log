@@ -421,3 +421,17 @@ def add_journal_content(request, videoID):
 	return render(request, 'log/journal_content_form.html', context_dict)
 
 
+def video_tags(request, videoID):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	tags = JournalContent.objects.filter(videoID=videoID)
+	context_dict = {'tags': tags, 'user_type':user_type, 'subjects': subjects,}
+	response = render(request, 'log/tags.html', context_dict)
+	return response
+
+
+
+
+
+
+

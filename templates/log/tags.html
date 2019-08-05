@@ -1,0 +1,21 @@
+{% extends 'log/base.html' %}
+
+{% load staticfiles %}
+
+	{% block body_block %}
+	a
+	<div class="row">
+		<div class="col-lg-12">
+			<br><br><br>
+			<div class="text-center">
+			{% if tags %}
+			{% for t in tags %}
+			<h3>{{forloop.counter}}. {{t.tags}}</h3>
+			{% endfor %}
+			{% else %}
+			<strong>No tags saved for this video</strong>
+			{% endif %}
+			</div>
+		</div>
+	</div>
+	{% endblock %}
