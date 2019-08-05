@@ -29,5 +29,6 @@ urlpatterns = [
     url(r'^journal/view_note/(?P<slug>[\w\-]+)/$', views.show_note, name='show_note'),
     url(r'^(?P<videoID>\d+)/journal/save_timecodes/$', views.add_journal_content, name='add_journal_content'),
     url(r'^video/(?P<videoID>\d+)/tags/$', views.video_tags, name='video_tags'),
+    url(r'^search_tags/$', views.search_tags, name='search_tags'),
 
 ]

@@ -430,6 +430,15 @@ def video_tags(request, videoID):
 	return response
 
 
+def search_tags(request):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	# videos = Video.objects.all().order_by('videoID')
+	tags = JournalContent.objects.all().order_by('tags')
+	response = render(request, 'log/search_tags.html', {'tags':tags, 'user_type': user_type, 'subjects':subjects})
+	return response
+
+
 
 
 

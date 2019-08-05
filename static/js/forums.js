@@ -1,16 +1,17 @@
-function myFunction() {
-	var input, filter, di, p, a, i, txtValue;
-	input = document.getElementById("myInput");
+function searchFunction() {
+	var input, filter, list, l, a, i, txtValue;
+	input = document.getElementById('myInput');
 	filter = input.value.toUpperCase();
-	
-	p = document.getElementsByTagName("p");
-	for (i = 0; i < p.length; i++){
-		a = p[i];
+	list = document.getElementById("tag-list")
+	l = document.getElementsByTagName('li');
+
+	for (i = 0; i < l.length; i++){
+		a = l[i];
 		txtValue = a.textContent || a.innerText;
 		if (txtValue.toUpperCase().indexOf(filter) > -1) {
-			p[i].style.display = "";
+			l[i].style.display = "";
 		} else {
-			p[i].style.display = "none";
+			l[i].style.display = "none";
 		}	
 		
 	}
