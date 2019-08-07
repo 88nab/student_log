@@ -14,6 +14,9 @@
 					  </video>
 		  				<div class="quiz-bar">
 						</div>
+							<br>
+							<button id="likes" data-vidid="{{video.videoID}}" class="btn btn-success btn-sm glyphicon glyphicon-thumbs-up" type="button"> {{ video.likes }}</button>
+							<button id="dislikes" data-vidid="{{video.videoID}}" class="btn btn-danger btn-sm glyphicon glyphicon-thumbs-down" type="button"> {{ video.dislikes }}</button>
 							<h3>Click <a href="{% url 'add_journal_content' video.videoID %}">here</a> to save timecodes to your own journal to help you study and add tags to help others.</h3><br>
 							<h4>Click <a href="{% url 'video_tags' video.videoID %}">here</a> to see how others have tagged this video.</h4><br>
 							<h4>Unsure about the what you've seen? Try starting a <a href="{% url 'forum_view' %}">forum</a> to discuss with your peers.</h4>
@@ -22,4 +25,5 @@
 					</div>
 				</div>
 			</div>
+			<script type="text/javascript" src="{% static 'js/log-ajax.js' %}"></script>
 {% endblock %}

@@ -30,5 +30,7 @@ urlpatterns = [
     url(r'^(?P<videoID>\d+)/journal/save_timecodes/$', views.add_journal_content, name='add_journal_content'),
     url(r'^video/(?P<videoID>\d+)/tags/$', views.video_tags, name='video_tags'),
     url(r'^search_tags/$', views.search_tags, name='search_tags'),
+    url(r'^like/$', views.like_video, name='like_video'),
+    url(r'^dislike/$', views.dislike_video, name='like_video'),
 
 ]

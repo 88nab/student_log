@@ -22,8 +22,7 @@
 						<div class="col-lg-12 text-center">
 							<div class="well">
 								<div id="tag-list">
-								<strong><li>{{tag.tags}}</li></strong>
-								<h5><a href="{% url 'video_test' tag.videoID %}">Click here to view this video</a></h5>
+								<p><strong>{{tag.tags}} - </strong><a href="{% url 'video_test' tag.videoID %}">Video {{tag.videoID}}</a></h5></p>
 							</div>
 						</div>
 								{% endfor %}

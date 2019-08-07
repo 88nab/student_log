@@ -80,11 +80,16 @@ class Video(models.Model):
 	uploader = CurrentUserField()
 	views = models.IntegerField(default=0)
 	likes = models.IntegerField(default=0)
+	dislikes = models.IntegerField(default=0)
 	subject = models.ForeignKey(Subject)
 	
+	# Needed to convert this to a string - had issues getting the data from urls when it was an int
+	# Was coming up as Video Object rather than the ID otherwise
 	def __str__(self):
 		return str(self.videoID)
 
+
+# Not really ended up using this - might delete. Easier to use username as user has to be logged in to access site anyway
 class JournalCreator(models.Model):
 	student = CurrentUserField()
 	journalID = models.AutoField(primary_key=True)
@@ -96,6 +101,7 @@ class JournalContent(models.Model):
 	videoID = models.ForeignKey(Video)
 	time_saved = models.DateTimeField(default=timezone.now)
 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+	#This isn't quite right - need to look at it again. Defaulting to one decimal place
 	description = models.CharField(max_length=9999, null=True)
 	tags = models.CharField(max_length=25)
 

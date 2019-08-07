@@ -60,7 +60,7 @@
 		                		{% if user.user_type == 'STUDENT' %}
 		                		<li><a href="{% url 'show_journal' user.username %}">{{user.first_name}}'s Journal</a></li>
 		                		{% endif %}
-		               			<li><a href="{% url 'forum_view' %}">Forums</a></li> 
+		               			<!-- <li><a href="{% url 'forum_view' %}">Tag Rater</a></li>  -->
 		               			<li><a href="{% url 'search_tags' %}">Search Tags</a></li>
 		                   		<li><a href="{% url 'contact_us' %}">Contact Us</a></li>
 		                   		</ul>

@@ -15,6 +15,9 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 @login_required 
 def index(request):
+	# Have to add the user_type and subjects to every view so that the complete dropdown menu
+	# appears in the navbar - perhaps a quicker way to fix this would be to create a view for the base.
+	# Will look into tidying it later
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
 	most_viewed=Video.objects.all().order_by('-views')[:5]
@@ -265,18 +268,31 @@ def forum_view(request):
 	response = render(request, 'log/forum.html', {'user_type': user_type, 'subjects':subjects})
 	return response
 
-# def like_video(request):
-# 	videoID =None
-# 	if request.method=='GET':
-# 		videoID= request.GET['videoID']
-# 	likes=0
-# 	if videoID:
-# 		video=Video.objects.get(id=int(videoID))
-# 		if video:
-# 			likes= video.likes + 1
-# 			video.likes =likes
-# 			video.save()
-# 		return HttpResponse(likes)
+def like_video(request):
+	videoID =None
+	if request.method=='GET':
+		videoID= request.GET['videoID']
+	likes=0
+	if videoID:
+		video=Video.objects.get(videoID=videoID)
+		if video:
+			likes= video.likes + 1
+			video.likes =likes
+			video.save()
+		return HttpResponse(likes)
+
+def dislike_video(request):
+	videoID =None
+	if request.method=='GET':
+		videoID= request.GET['videoID']
+	dislikes=0
+	if videoID:
+		video=Video.objects.get(videoID=videoID)
+		if video:
+			dislikes= video.dislikes + 1
+			video.dislikes =dislikes
+			video.save()
+		return HttpResponse(dislikes)
 
 def video_stats(request, videoID):
 	user_type = CustomUser.objects.values('user_type')

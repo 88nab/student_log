@@ -1,17 +1,17 @@
 function searchFunction() {
-	var input, filter, list, l, a, i, txtValue;
+	var input, filter, list, p, a, i, txtValue;
 	input = document.getElementById('myInput');
 	filter = input.value.toUpperCase();
 	list = document.getElementById("tag-list")
-	l = document.getElementsByTagName('li');
+	p = document.getElementsByTagName('p');
 
-	for (i = 0; i < l.length; i++){
-		a = l[i];
+	for (i = 0; i < p.length; i++){
+		a = p[i];
 		txtValue = a.textContent || a.innerText;
 		if (txtValue.toUpperCase().indexOf(filter) > -1) {
-			l[i].style.display = "";
+			p[i].style.display = "";
 		} else {
-			l[i].style.display = "none";
+			p[i].style.display = "none";
 		}	
 		
 	}
