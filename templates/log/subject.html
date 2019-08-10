@@ -15,7 +15,7 @@
 					<h2>{{subject.name}}'s student rating</h2> 
 					<button id="subjectLikes" data-vidid="{{subject.slug}}" class="btn btn-success btn-sm glyphicon glyphicon-thumbs-up" type="button"> {{ subject.likes }}</button>
 							<button id="subjectDislikes" data-vidid="{{subject.slug}}" class="btn btn-danger btn-sm glyphicon glyphicon-thumbs-down" type="button"> {{ subject.dislikes }}</button>
-					<h3><a href="#">Click here to discuss and share your additional content</a></h3>
+					<h3><a href="{% url 'subject_discussion' subject.slug %}">Click here to discuss and share your additional content</a></h3>
 					<br>
 					{% endif %}
 				</div>

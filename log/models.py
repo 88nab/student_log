@@ -135,6 +135,28 @@ class Note(models.Model):
 	def __str__(self):
 		return self.title
 
+class StudentFileUploads(models.Model):
+	uploader = CurrentUserField()
+	upload_file = models.FileField(upload_to='student-uploads/', null=True, verbose_name="")
+	subject = models.ForeignKey(Subject)
+	upload_time = models.DateTimeField(default=timezone.now)
+	tags = models.CharField(max_length=25)
+	comment = models.CharField(max_length=9999, null=True)
+
+	class Meta:
+		verbose_name_plural = 'Student File Uploads'
+
+
+class StudentVideoLinkUploads(models.Model):
+	uploader = CurrentUserField()
+	upload_link = models.URLField(max_length=250)
+	subject = models.ForeignKey(Subject)
+	upload_time = models.DateTimeField(default=timezone.now)
+	tags = models.CharField(max_length=25)
+	comment = models.CharField(max_length=9999, null=True)
+
+	class Meta:
+		verbose_name_plural = 'Student Link Uploads'
 
 
 

@@ -34,5 +34,6 @@ urlpatterns = [
     url(r'^like-subject/$', views.like_subject, name='like_subject'),
     url(r'^dislike/$', views.dislike_video, name='dislike_video'),
     url(r'^dislike-subject/$', views.dislike_subject, name='dislike_subject'),
-
+    url(r'^subject/(?P<subject_name_slug>[\w\-]+)/subject-discussion/$', views.subject_discussion, name='subject_discussion'),
+    url(r'^subject/(?P<subject_name_slug>[\w\-]+)/file-upload/$', views.add_subject_file, name='add_subject_file'),
 ]

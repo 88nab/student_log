@@ -29,6 +29,9 @@ class NoteAdmin(admin.ModelAdmin):
 class JournalContentAdmin(admin.ModelAdmin):
 	list_display=('student','videoID', 'timestamp')
 
+class StudentFileUploadsAdmin(admin.ModelAdmin):
+	list_display=('uploader', 'upload_file', 'upload_time')
+
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
@@ -44,3 +47,4 @@ admin.site.register(Subject, SubjectAdmin)
 admin.site.register(JournalCreator, JournalCreatorAdmin)
 admin.site.register(Note, NoteAdmin)
 admin.site.register(JournalContent, JournalContentAdmin)
+admin.site.register(StudentFileUploads, StudentFileUploadsAdmin)

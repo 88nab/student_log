@@ -76,6 +76,23 @@ class JournalContentForm(forms.ModelForm):
 		model = JournalContent
 		exclude = ('student', 'time_saved',)
 
+class StudentFileUploadsForm(forms.ModelForm):
+
+	comment = forms.CharField(max_length=2000, widget=forms.Textarea())
+
+	class Meta:
+		model = StudentFileUploads
+		fields =('upload_file', 'tags', 'comment',)
+
+
+
+class StudentVideoLinkUploadsForm(forms.ModelForm):
+
+	comment= forms.CharField(max_length=2000, widget=forms.Textarea(attrs={'cols': 60, 'rows': 3}))
+
+	class Meta:
+		model = StudentVideoLinkUploads
+		fields =('upload_link', 'tags',  'comment',)
 
 
 	

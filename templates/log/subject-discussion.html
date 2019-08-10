@@ -1,0 +1,28 @@
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+
+<div class="page-header text-center">
+	<br>
+	<h3>Helpful content for {{subject.name}}</h3>
+</div>
+
+<div class="container-fluid">
+ <div class="row">
+            <div class="col-lg-6">
+                <br> 
+                <div class="well well-lg text-center">
+                    <h4><a href="{% url 'add_subject_file' subject.slug %}">Upload a File</a></h4>
+                </div>
+            </div>
+                <div class="col-lg-6">
+                    <br>
+                    <div class="well well-lg text-center">
+                        <h4><a href="#">Upload a video link</a></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

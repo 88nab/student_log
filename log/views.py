@@ -482,6 +482,44 @@ def search_tags(request):
 	response = render(request, 'log/search_tags.html', {'tags':tags, 'user_type': user_type, 'subjects':subjects})
 	return response
 
+def subject_discussion(request, subject_name_slug):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')	
+	context_dict = {}
+
+	try:
+		subject = Subject.objects.get(slug=subject_name_slug)
+		context_dict['subject'] = subject
+		context_dict['user_type']=user_type
+		context_dict['subjects']= subjects
+	except Subject.DoesNotExist:
+		context_dict['subject'] = None
+	return render(request, 'log/subject-discussion.html', context_dict)
+
+
+def add_subject_file(request, subject_name_slug):
+	context_dict={}
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	subject = Subject.objects.get(slug=subject_name_slug)
+	user = request.user
+	form = StudentFileUploadsForm()
+	if request.method == 'POST':
+		form = StudentFileUploadsForm(request.POST, request.FILES)
+		if form.is_valid():
+			if subject:
+				file=form.save(commit=False)
+				file.subject=subject
+				file.uploader = user
+				file.save()
+			return subject_discussion(request, subject_name_slug)
+	else:
+		print(form.errors) 
+
+	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'subject':subject, 'user': user,}
+	return render(request, 'log/student-file-upload.html', context_dict)
+
+
 
 
 
