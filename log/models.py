@@ -11,6 +11,11 @@ from django.template.defaultfilters import slugify
 
 # Create your models here.
 
+
+#Created a custom user to ensure that the user_type would be included from the get-go
+#This is beneficial for security aspects as different users will have access to different parts of the site
+#As such, the username has to be unique as it will be used as a FK for many tables, 
+#even though the email address could also be used as a PK
 class CustomUser(AbstractUser):
 	USER_TYPE_CHOICES = (
 		('STUDENT', 'Student'),
@@ -22,13 +27,13 @@ class CustomUser(AbstractUser):
 	user_type = models.CharField(max_length=8, choices=USER_TYPE_CHOICES, default='Student')
 	username = models.CharField(max_length=20, unique=True)
 
-	# class Meta:
-	# 	unique_together = (('email', 'user_type'))
-
 	def __str__(self):
 		return self.username
 
-
+#Using the package CustomUserField to aid the joining of my models due to issues encountered in previous attempts
+#as a result of using a custom user rather than the default user. 
+#This will make joining the database tables more streamlined, 
+#as the current user field can effectively be used as part of the primary key in most tables
 class Subject(models.Model):
 	name = models.CharField(max_length=250, unique=True)
 	views = models.IntegerField(default=0)
@@ -45,34 +50,10 @@ class Subject(models.Model):
 	def __str__(self):
 		return self.name
 
-
-
-# class Profile(models.Model):
-# 	user=models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-
-# @receiver(post_save,sender=CustomUser)
-# def create_profile(sender, instance, created, **kwargs):
-# 	if created:
-# 		CustomUser.objects.created(user=instance)
-# @receiver(post_save, sender=CustomUser)
-# def save_profile(sender, instance, **kwargs):
-# 	instance.CustomUser.save()
-
-
-# class StudentProfile(models.Model):
-# 	profile=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,)
-
-# class Subject(models.Model):
-# 	lecturer = models.ForeignKey(CustomUser)
-# 	name = models.CharField(max_length=128, blank=True) 
-	# lecturer_email = CustomUser.objects.select_related('user_type').filter(user_type='LECTURER')
-	
-	# class Meta:
-	# 	db_table = 'lecturer_user'
-
-	# def __str__(self):
-	# 	return self.lecturer
-
+#This model represents the videos uploaded by the lecturer. 
+#Am currently using short videos as placeholders, 
+#but will tell the users in testing to imagine they are lecture recordings
+#Content uploaded by students will be detailed in other models.
 class Video(models.Model):
 	videoID = models.AutoField(primary_key=True)
 	videoFile = models.FileField(upload_to='videos/', null=True, verbose_name="")
@@ -90,13 +71,19 @@ class Video(models.Model):
 		return str(self.videoID)
 
 
-# Not really ended up using this - might delete. Easier to use username as user has to be logged in to access site anyway
+# Not really ended up using this - might delete. 
+#Easier to use username as user has to be logged in to access site anyway, 
+#so there is no real need for a journal ID as well
 class JournalCreator(models.Model):
 	student = CurrentUserField()
 	journalID = models.AutoField(primary_key=True)
 	journal_name = models.CharField(max_length=50, unique=True)
 
 
+#This is the content that a student uploads to their journal
+#which will be accessible to other students. 
+#Other students will be able to see how they have tagged the videos 
+#and view them from the timestamp
 class JournalContent(models.Model):
 	student = CurrentUserField()
 	videoID = models.ForeignKey(Video)
@@ -107,17 +94,12 @@ class JournalContent(models.Model):
 	tags = models.CharField(max_length=25)
 
 
-class Comment(models.Model):
-	video = models.ForeignKey(Video)
-	user = CurrentUserField()
-	def __unicode__(self):
-		return self.name
-	comment = models.CharField(max_length=2000, null=True)
-	date_posted = models.DateTimeField(auto_now=True)
 
-	def __str__(self):
-		return self.comment
-
+#This is the content that a student uploads to their journal
+#which will be private. It is, in effect, another way for them to save their notes -
+#be it notes they took in a lecture, or additional notes they took after rewatching it,
+#or indeed notes from having viewed other content uploaded by the students.
+#There will be no way for other students to access this content.
 class Note(models.Model):
 	student = CurrentUserField()
 	subject = models.ForeignKey(Subject)
@@ -135,6 +117,11 @@ class Note(models.Model):
 	def __str__(self):
 		return self.title
 
+
+#This model represents files uploaded by students. Have used the file field,
+#so they should be able to upload a wide variety of content.
+#Will create another model so that the students can post comments and their responses
+#to the uploads, so that they can discuss the content, perhaps providing each other with feedback, if necessary
 class StudentFileUploads(models.Model):
 	uploader = CurrentUserField()
 	upload_file = models.FileField(upload_to='student-uploads/', null=True, verbose_name="")
@@ -143,10 +130,14 @@ class StudentFileUploads(models.Model):
 	tags = models.CharField(max_length=25)
 	comment = models.CharField(max_length=9999, null=True)
 
+	#I mistakenly included the s in the name of the class, so had to fix the verbose plural name
 	class Meta:
 		verbose_name_plural = 'Student File Uploads'
 
-
+#It is most unlikely that students would have access to their own video files to upload,
+#so it made sense to include an opportunity to upload links to videos as well - 
+#YouTube content that they might consider to be beneficial to the group. 
+#Otherwise,  takes ont he same format as the model above
 class StudentVideoLinkUploads(models.Model):
 	uploader = CurrentUserField()
 	upload_link = models.URLField(max_length=250)
@@ -159,59 +150,16 @@ class StudentVideoLinkUploads(models.Model):
 		verbose_name_plural = 'Student Link Uploads'
 
 
-
-		
-
-	# def save_model(self, request, obj, form, change):
-	# 	obj.added_by = request.user
-	# 	super().save_model(request, obj, form, change)
-
-	# def __str__(self):
-	# 	return self.videoID + ":" + str(self.videoFile)
-
-# class Journal(models.Model):
-# 	# student= models.ForeignKey(Student)
-# 	videoID = models.ForeignKey(Video)
-# 	journalID = models.AutoField(primary_key=True)
-# 	time_saved = models.DateTimeField(default=timezone.now)
-# 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-# 	description = models.CharField(max_length=9999, null=True)
-
-# class Student(models.Model):
-# 	student = models.OneToOneField(CustomUser)
-# 	# student_email = CustomUser.objects.select_related('user_type').filter(user_type='STUDENT')
-# 	journalID = models.ForeignKey(Journal)
-	
-	# class Meta:
-	# 	db_table = 'student_user'
-
-	# def __str__(self):
-	# 	return self.student
-
-# class Video(models.Model):
-# 	videoID = models.AutoField(primary_key=True)
-# 	videoDescription = models.CharField(max_length=250)
-# 	videoFile = models.FileField(upload_to='videos/', null=True, verbose_name="")
-# 	views = models.IntegerField(default=0)
-# 	likes = models.IntegerField(default=0)
+# class Comment(models.Model):
+# 	video = models.ForeignKey(Video)
+# 	user = CurrentUserField()
+# 	def __unicode__(self):
+# 		return self.name
+# 	comment = models.CharField(max_length=2000, null=True)
+# 	date_posted = models.DateTimeField(auto_now=True)
 
 # 	def __str__(self):
-# 		return self.videoID + ":" + str(self.videoFile)
-
-# class Journal(models.Model):
-# 	# student= models.ForeignKey(Student)
-# 	videoID = models.ForeignKey(Video)
-# 	journalID = models.AutoField(primary_key=True)
-# 	time_saved = models.DateTimeField(default=timezone.now)
-# 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-# 	description = models.CharField(max_length=9999, null=True)
-
-# class Forum(models.Model):
-# 	videoID = models.ForeignKey(Video)
-# 	author_email = models.ForeignKey(Student)
-# 	time_posted = models.DateTimeField(default=timezone.now)
-# 	comment = models.CharField(max_length=5000, null=True)
-
+# 		return self.comment
 
 # class Quiz(models.Model):
 # 	quizID = models.AutoField(primary_key=True)

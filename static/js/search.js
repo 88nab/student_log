@@ -1,8 +1,9 @@
 function searchFunction() {
-	var input, filter, list, p, a, i, txtValue;
+	var input, filter, list1, list2, p, a, i, txtValue;
 	input = document.getElementById('myInput');
 	filter = input.value.toUpperCase();
-	list = document.getElementById("tag-list")
+	list1 = document.getElementById("tag-list")
+	list2 = document.getElementById("sTag-list")
 	p = document.getElementsByTagName('p');
 
 	for (i = 0; i < p.length; i++){

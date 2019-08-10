@@ -23,6 +23,28 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="well well-sm text-center">
+                        <h5>Student uploads for {{subject.name}}</h5>
+                    </div>
+                    {% if uploads %}
+                    <div class="well text-center">
+                        {% for u in uploads %}
+                        {{u.tags}}<br>
+                        {{u.comment}}<br>
+                        {{u.upload_time}}<br>
+                        Uploaded by {{u.uploader}}<br>
+                        <a href={{MEDIA_URL}}{{u.upload_file.name}}>Click here to view upload</a><br>
+                        <a href="#">To comment, click here</a>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+
+
+
+
         </div>
 
 {% endblock %}

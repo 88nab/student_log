@@ -1,3 +1,9 @@
+#Use of CurrentUserField in Models means that I can only really create users quickly here,
+#but there is little point as the password field isn't included in the model.
+#I'll have to use the website itself to upload content. Could definitely be considered a design flaw,
+#however, the joining of the models runs far more smoothly through use of this package
+
+
 import os 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'student_log.settings')

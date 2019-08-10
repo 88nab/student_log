@@ -18,19 +18,25 @@
 
 			<br><br>
 					{% for tag in tags %}
+					{% for s in sTags %}
 					<div class="row">
 						<div class="col-lg-12 text-center">
 							<div class="well">
 								<div id="tag-list">
-								<p><strong>{{tag.tags}} - </strong><a href="{% url 'video_test' tag.videoID %}">Video {{tag.videoID}}</a></h5></p>
+								<p><strong>{{tag.tags}} - </strong>Lecture Content - <a href="{% url 'video_test' tag.videoID %}">Video {{tag.videoID}}</a></h5></p>
 							</div>
 						</div>
+							<div class="well">
+								<div id="sTag-list">
+								<p><strong>{{s.tags}} - </strong>Student Upload - <a href="#">Link to Upload</a></h5></p>
+							</div>
+						</div>
+								{% endfor %}
 								{% endfor %}
 						</div>
 					</div>
 				</div>
 			</div>
 
-<script type="text/javascript" src="{% static 'js/forums.js' %}"></script>
-<link href="{% static 'css/search.css' %}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{% static 'js/search.js' %}"></script>
 {% endblock %}

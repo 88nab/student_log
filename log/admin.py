@@ -35,16 +35,14 @@ class StudentFileUploadsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
-# admin.site.register(Upload)
-# admin.site.register(QuizResult)
-# admin.site.register(Quiz)
-# admin.site.register(Forum)
-# admin.site.register(Journal)
 admin.site.register(Video, VideoAdmin)
-# admin.site.register(Student, StudentAdmin)
-# admin.site.register(StudentProfile)
 admin.site.register(Subject, SubjectAdmin)
 admin.site.register(JournalCreator, JournalCreatorAdmin)
 admin.site.register(Note, NoteAdmin)
 admin.site.register(JournalContent, JournalContentAdmin)
 admin.site.register(StudentFileUploads, StudentFileUploadsAdmin)
+
+
+
+
+

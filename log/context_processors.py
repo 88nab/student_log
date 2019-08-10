@@ -1,4 +1,4 @@
-
+# Don't actually think I need these as I've been putting stuff in views
 
 def subjects(request):
 	from log.models import Subject 
@@ -39,6 +39,13 @@ def timestamps(request):
 		'timestamps':timestamps,
 	}
 
+def studentUploads(request):
+	from log.models import StudentFileUploads
+	uploads= StudentFileUploads.objects.all()
+
+	return {
+		'uploads':uploads,
+	}
 
 
 

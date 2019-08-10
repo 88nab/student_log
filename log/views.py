@@ -87,7 +87,7 @@ def contact_us(request):
 			return redirect('index')
 	return render(request, "log/contact_us.html", {'form': form, 'user_type': user_type, 'subjects':subjects})
 
-# Need to fix this
+# Not currently using this
 def successView(request):
 	return HttpResponse('Success! Thank you for your message.')
 
@@ -98,7 +98,7 @@ def change_password(request):
 		form = PasswordChangeForm(request.user, request.POST)
 		if form.is_valid():
 			user = form.save()
-			update_session_auth_hash(request, user)  # Important!
+			update_session_auth_hash(request, user) 
 			messages.success(request, 'Your password was successfully updated!')
 			return redirect('index')
 		else:
@@ -121,10 +121,6 @@ def upload(request, subject_name_slug):
 		subject= Subject.objects.get(slug=subject_name_slug)
 		current_user = request.user.username
 		subject_details = Subject.objects.values('uploader')
-		# print (current_user.)
-		# print (subject_details.query)
-		# if subject_details != current_user:
-		# 	return HttpResponse('You cannot upload content to this subject. Please select one of your own subjects.')
 	except Subject.DoesNotExist:
 		subject = None
 
@@ -194,73 +190,6 @@ def journal_creator(request):
 
 	return render(request, 'log/journal_creator.html', {'form': form, 'user_type': user_type, 'subjects':subjects})
 
-# def show_video(request, subject_name_slug, videoID):
-# 		context_dict = {}
-# 		user_type = CustomUser.objects.values('user_type')
-# 		subjects = Subject.objects.all().order_by('uploader')
-# 		subject = Subject.objects.get(slug=subject_name_slug)
-# 		videos = Video.objects.get(videoID=videoID)
-# 		selected_video = videos.videoID
-# 		print(subject)
-# 		print(videos.videoID)
-
-
-# 		# selected_subject = Subject.objects.filter(subject_name_slug).order_by(videoID=selected_video)
-# 		# subject_name_slug = request.GET['slug']
-# 		# videoID = request.GET['videoID']
-# 		# selected_subject = request.GET.get('slug', None)
-# 		# selected_video = request.GET.get('videoID', None)
-# 		# video_detail = None
-# 		# video_id_integer = int(videoID)
-		
-# 		# vid_list = Video.objects.filter(videoID=video_id_integer)
-
-# 		# if len(vid_list) > 0:
-# 		# 	video_detail = vid_list[0]
-# 		# else:
-# 		# 	video_detail = None
-
-# 		try:
-# 			# subject = Subject.objects.get(slug=subject_name_slug)
-# 			# videos = Video.objects.get(videoID=videoID)
-# 			comment = Comment.objects.filter(videoID=videoID).order_by('-date_posted')
-# 			form = CommentForm()
-# 			context_dict['comment'] =  comment
-
-# 			if request.method == 'POST':
-# 				form.videos = videos
-# 				form = CommentForm(request.POST)
-
-# 				if form.is_valid():
-# 					getInfo = form.save(commit=False)
-# 					getInfo.save()
-
-# 					info_dict = {"comment": getInfo.comment, "date": getInfo.date_posted.strftime('%B %d, %Y, %I:%M %p')}
-# 					return HttpResponse(json.dumps(info_dict), content_type="application/json",)
-
-# 				else:
-# 					print(form.errors)
-
-# 		except Subject.DoesNotExist:
-# 			context_dict['videos'] = None
-# 			context_dict['comment'] = None
-
-# 		context_dict = {'form': form,'selected_video': selected_video, 'comment':comment, 'user_type': user_type, 'subjects':subjects}
-# 		print(videoID)
-# 		xxx = int(videoID)
-# 		print(xxx)
-# 		# try:
-# 		# 	subject = Subject.objects.get(slug=subject_name_slug)
-# 		# 	videos = Video.objects.get(videoID=videoID)
-# 		# 	# context_dict= {'subject': subject, 'videos':videos, 'user_type': user_type, 'subjects': subjects}
-# 		# 	context_dict['subject'] = subject
-# 		# 	context_dict['videos'] = videos
-# 		# 	context_dict['user_type']=user_type
-# 		# 	context_dict['subjects']= subjects
-# 		# except Subject.DoesNotExist:
-# 		# 	context_dict['videos'] = None
-# 		# 	context_dict['subject'] = None
-# 		return render(request, 'log/video.html', context_dict)
 
 def forum_view(request):
 	user_type = CustomUser.objects.values('user_type')
@@ -356,50 +285,6 @@ def video_test(request, videoID):
 	return response
 
 
-
-# def show_video(request, videoID, subject_name_slug):
-# 	user_type = CustomUser.objects.values('user_type')
-# 	subjects = Subject.objects.all().order_by('uploader')
-# 	context_dict={}
-
-# 	print(isinstance(videoID, str))
-# 	vid_as_int = int(videoID)
-# 	print(isinstance(vid_as_int, int))
-# 	try:
-# 		video = Video.objects.get(videoID=vid_as_int)
-# 		subject = Subject.objects.get(slug=subject_name_slug)
-# 		context_dict['video']= video
-# 		context_dict['subject'] = subject
-# 		context_dict['user_type']=user_type
-# 		context_dict['subjects']= subjects
-# 	except Video.DoesNotExist:
-# 		context_dict['video']= None
-# 		context_dict['subject']= None
-
-# 	response = render(request, 'log/video.html', context_dict)
-# 	return response
-
-# def show_video(request, subject_name_slug, videoID):
-# 	context_dict={}
-# 	user_type = CustomUser.objects.values('user_type')
-# 	subjects = Subject.objects.all().order_by('uploader')
-# 	# video = Video.objects.get(videoID=videoID)
-# 	# subject = Subject.objects.get(slug=subject_name_slug)
-# 	print(videoID)
-# 	print(subject_name_slug)
-# 	context_dict={'user_type':user_type, 'subjects': subjects, 'videoID':videoID, 'subject_name_slug':subject_name_slug}
-	# print(video)
-	
-	# try:
-	# 	context_dict['video']= video
-	# 	context_dict['subject']  = subject
-	# 	context_dict['user_type']=user_type
-	# 	context_dict['subjects']= subjects
-	# except Video.DoesNotExist:
-	# 	context_dict['video']= None
-	
-	# return render(request, 'log/video.html', context_dict)
-
 def show_journal(request, username):
 	context_dict={}
 	user_type = CustomUser.objects.values('user_type')
@@ -477,23 +362,26 @@ def video_tags(request, videoID):
 def search_tags(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
-	# videos = Video.objects.all().order_by('videoID')
-	tags = JournalContent.objects.all().order_by('tags')
-	response = render(request, 'log/search_tags.html', {'tags':tags, 'user_type': user_type, 'subjects':subjects})
+	tags = JournalContent.objects.all().order_by('tags') #Tags from journal
+	sTags = StudentFileUploads.objects.all().order_by('tags') #Tags from student uploads
+	response = render(request, 'log/search_tags.html', {'tags':tags, 'sTags':sTags, 'user_type': user_type, 'subjects':subjects})
 	return response
 
 def subject_discussion(request, subject_name_slug):
 	user_type = CustomUser.objects.values('user_type')
-	subjects = Subject.objects.all().order_by('uploader')	
+	subjects = Subject.objects.all().order_by('uploader')
 	context_dict = {}
 
 	try:
 		subject = Subject.objects.get(slug=subject_name_slug)
+		uploads = StudentFileUploads.objects.filter(subject=subject).order_by('-upload_time')	
 		context_dict['subject'] = subject
+		context_dict['uploads']= uploads
 		context_dict['user_type']=user_type
 		context_dict['subjects']= subjects
 	except Subject.DoesNotExist:
 		context_dict['subject'] = None
+		context_dict['uploads'] = None
 	return render(request, 'log/subject-discussion.html', context_dict)
 
 
