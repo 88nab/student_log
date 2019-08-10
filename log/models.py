@@ -33,6 +33,7 @@ class Subject(models.Model):
 	name = models.CharField(max_length=250, unique=True)
 	views = models.IntegerField(default=0)
 	likes=models.IntegerField(default=0)
+	dislikes=models.IntegerField(default=0)
 	slug = models.SlugField(unique=True)
 	uploader = CurrentUserField()
 
@@ -104,8 +105,6 @@ class JournalContent(models.Model):
 	#This isn't quite right - need to look at it again. Defaulting to one decimal place
 	description = models.CharField(max_length=9999, null=True)
 	tags = models.CharField(max_length=25)
-
-
 
 
 class Comment(models.Model):

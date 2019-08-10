@@ -31,6 +31,8 @@ urlpatterns = [
     url(r'^video/(?P<videoID>\d+)/tags/$', views.video_tags, name='video_tags'),
     url(r'^search_tags/$', views.search_tags, name='search_tags'),
     url(r'^like/$', views.like_video, name='like_video'),
-    url(r'^dislike/$', views.dislike_video, name='like_video'),
+    url(r'^like-subject/$', views.like_subject, name='like_subject'),
+    url(r'^dislike/$', views.dislike_video, name='dislike_video'),
+    url(r'^dislike-subject/$', views.dislike_subject, name='dislike_subject'),
 
 ]

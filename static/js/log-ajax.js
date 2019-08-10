@@ -18,3 +18,24 @@ $.get('/log/dislike/', {videoID: vidid}, function(data){
             $('#likes').hide();
 	}); 
 });
+
+
+$('#subjectLikes').click(function(){ var sub;
+sub = $(this).attr("data-vidid");
+$.get('/log/like-subject/', {slug: sub}, function(data){
+        $('#like_count').html(data);
+            $('#subjectLikes').hide();
+            $('#subjectDislikes').hide();
+	}); 
+});
+
+
+$('#subjectDislikes').click(function(){ var sub;
+sub = $(this).attr("data-vidid");
+$.get('/log/dislike-subject/', {slug: sub}, function(data){
+        $('#like_count').html(data);
+            $('#subjectLikes').hide();
+            $('#subjectDislikes').hide();
+	}); 
+});
+

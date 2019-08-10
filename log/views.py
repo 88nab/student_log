@@ -281,6 +281,20 @@ def like_video(request):
 			video.save()
 		return HttpResponse(likes)
 
+def like_subject(request):
+	slug =None
+	if request.method=='GET':
+		slug= request.GET['slug']
+	likes=0
+	if slug:
+		slug=Subject.objects.get(slug=slug)
+		if slug:
+			likes= slug.likes + 1
+			slug.likes =likes
+			slug.save()
+		return HttpResponse(likes)
+
+
 def dislike_video(request):
 	videoID =None
 	if request.method=='GET':
@@ -292,6 +306,20 @@ def dislike_video(request):
 			dislikes= video.dislikes + 1
 			video.dislikes =dislikes
 			video.save()
+		return HttpResponse(dislikes)
+
+
+def dislike_subject(request):
+	slug =None
+	if request.method=='GET':
+		slug= request.GET['slug']
+	likes=0
+	if slug:
+		slug=Subject.objects.get(slug=slug)
+		if slug:
+			dislikes= slug.dislikes + 1
+			slug.dislikes =dislikes
+			slug.save()
 		return HttpResponse(dislikes)
 
 def video_stats(request, videoID):
