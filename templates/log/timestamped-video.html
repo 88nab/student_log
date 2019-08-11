@@ -1,6 +1,8 @@
 {% extends 'log/base.html' %}
 {% load staticfiles %}
 
+<!-- Decided to make another html without the additional links to reduce cognitive load further, as it would be likely that someone viewing a video from a certain point depending on how it has been tagged would be less likely to  want to tag the video again-->
+
   
 {% block body_block %}
 <div class="container">
@@ -19,11 +21,40 @@
 
 
 	<script>
+	function convertTimestamp(timestamp) {
+		var input = timestamp;
+		var string  = input.toString();
+		var numberArray = string.split('.');
+		var array = new  Array();
+		array = numberArray;
+		// if (array.length == 2) {
+			var minutes = array[0];
+			var seconds= array[1];
+		// }
+		// if (array.length ==3) {
+		// 	var hours = array[0]
+		// 	var minutes = array[1];
+		// 	var seconds= array[2];
+		// }
+		// Will fix  this method as  there  could be double lectures recorded, meaning hours are necessary to include  as well 3600 seconds in an hour
+
+		if (minutes==0) {
+			return seconds;
+		}
+		else if (minutes>0) {
+			var totalSeconds = ((minutes * 60) + seconds);
+			return totalSeconds;
+
+		}
+
+	}
+
   		var video = document.getElementById("my-video");
-  		video.currentTime = 38;
-  		// convert_timestamp(journal_item.timestamp); 
-  		// it works in Chrome if I put in a number - currently trying to work out a way to get a method that converts it to seconds and can be used here. Javascript file isn't right yet
+  		var seconds= convertTimestamp({{journal_item.timestamp}});
+  		video.currentTime = seconds;
+  		// Seems to work when it's in the file, but I'm having issues when it's in the external js file. Will leave it here for now and hopefully tidy it later. Not  working in Firefox, but works in Chrome
   		video.load();
+  		var test = convertTimestamp({{journal_item.timestamp}});
 </script>
 <script type="text/javascript" src="{% static 'js/convert_timestamp.js' %}"></script>
 

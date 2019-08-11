@@ -89,7 +89,8 @@ class JournalContent(models.Model):
 	videoID = models.ForeignKey(Video)
 	time_saved = models.DateTimeField(default=timezone.now)
 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-	#This isn't quite right - need to look at it again. Defaulting to one decimal place
+	#Looks as though it's defaulting to one decimal place, but there are two when you click on the  arrows
+	#Need to fix it so that negative  numbers  aren't an option
 	description = models.CharField(max_length=9999, null=True)
 	tags = models.CharField(max_length=25)
 
