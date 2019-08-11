@@ -125,14 +125,23 @@ class Note(models.Model):
 class StudentFileUploads(models.Model):
 	uploader = CurrentUserField()
 	upload_file = models.FileField(upload_to='student-uploads/', null=True, verbose_name="")
+	upload_file_id = models.AutoField(primary_key=True, default=0)#Created a default as I'd already populated the database before adding this field - will delete if I end up repopulating the database from scratch again
 	subject = models.ForeignKey(Subject)
 	upload_time = models.DateTimeField(default=timezone.now)
 	tags = models.CharField(max_length=25)
-	comment = models.CharField(max_length=9999, null=True)
+	comment = models.TextField(max_length=9999, null=True)
 
 	#I mistakenly included the s in the name of the class, so had to fix the verbose plural name
 	class Meta:
 		verbose_name_plural = 'Student File Uploads'
+
+#Comment class for the file uploads - set up so that each comment can be replied to
+# class FileComment(models.Model):
+# 	first_post = models.ForeignKey(StudentFileUploads)
+# 	author = CurrentUserField()
+# 	reply = models.ForeignKey('FileComment', null=True, related_name='replies')
+# 	comment = models.TextField(max_length=500)
+# 	upload_time = models.DateTimeField(default=timezone.now)
 
 #It is most unlikely that students would have access to their own video files to upload,
 #so it made sense to include an opportunity to upload links to videos as well - 
@@ -141,6 +150,7 @@ class StudentFileUploads(models.Model):
 class StudentVideoLinkUploads(models.Model):
 	uploader = CurrentUserField()
 	upload_link = models.URLField(max_length=250)
+	upload_link_id = models.AutoField(primary_key=True)
 	subject = models.ForeignKey(Subject)
 	upload_time = models.DateTimeField(default=timezone.now)
 	tags = models.CharField(max_length=25)

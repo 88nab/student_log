@@ -1,0 +1,30 @@
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+  
+{% block body_block %}
+<div class="container">
+	<div class="row">
+			<div class="col-lg-12">
+				<br><br><br>
+					<div class="well well-lg text-center">
+					<video id='my-video' class='video-js vjs-big-play-centered' controls preload='auto' data-setup='{"fluid": true}'>
+						<source src="{{ MEDIA_URL}}{{video.videoFile.name}}" type="video/mp4">
+					  </video>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+	<script>
+  		var video = document.getElementById("my-video");
+  		video.currentTime = 38;
+  		// convert_timestamp(journal_item.timestamp); 
+  		// it works in Chrome if I put in a number - currently trying to work out a way to get a method that converts it to seconds and can be used here. Javascript file isn't right yet
+  		video.load();
+</script>
+<script type="text/javascript" src="{% static 'js/convert_timestamp.js' %}"></script>
+
+{% endblock %}

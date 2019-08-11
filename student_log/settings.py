@@ -158,7 +158,7 @@ LOGOUT_REDIRECT_URL = '/log/logout/'
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'catchhub1@gmail.com'
+EMAIL_HOST_USER = 'catchhub1@gmail.com' #I set up this email address in a previous version of this site - didn't see  the point in setting up a new one
 EMAIL_HOST_PASSWORD = 'CatchHub23?'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

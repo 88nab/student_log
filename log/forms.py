@@ -73,15 +73,22 @@ class StudentFileUploadsForm(forms.ModelForm):
 		model = StudentFileUploads
 		fields =('upload_file', 'tags', 'comment',)
 
+# class FileCommentForm(forms.ModelForm):
+# 	comment = forms.CharField(label="", widget=forms.Textarea(attrs={'cols': 60, 'rows': 3}))
+
+# 	class Meta:
+# 		model = FileComment
+# 		fields = ('comment',)
+
 
 
 class StudentVideoLinkUploadsForm(forms.ModelForm):
 
-	comment= forms.CharField(max_length=2000, widget=forms.Textarea(attrs={'cols': 60, 'rows': 3}))
+	comment = forms.CharField(max_length=2000, widget=forms.Textarea())
 
 	class Meta:
 		model = StudentVideoLinkUploads
-		fields =('upload_link', 'tags',  'comment',)
+		fields =('upload_link', 'tags', 'comment',)
 
 
 	

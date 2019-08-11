@@ -36,7 +36,7 @@
                     {{ t.tags }}<br>
                     <h4>Timestamp</h4>
                     {{t.timestamp}}<br>
-                    <h4><a href="{% url 'video_test' t.videoID %}">View video from saved timestamp</a></h4>
+                    <h4><a href="{% url 'timestamped_video' t.videoID %}">View video from saved timestamp</a></h4>
                     {% endfor %}
                     {% endif %}
                 </div>

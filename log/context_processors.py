@@ -1,4 +1,8 @@
-# Don't actually think I need these as I've been putting stuff in views
+# Don't actually think I need all of these 
+#as I've been able to achieve what I want putting stuff in views.
+#As such, I only registered subjects in the settings.py.
+#Have added the other ones in as I go in case I do encounter difficulties,
+#but it is unlikely that I will need them
 
 def subjects(request):
 	from log.models import Subject 

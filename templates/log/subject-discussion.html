@@ -19,7 +19,7 @@
                 <div class="col-lg-6">
                     <br>
                     <div class="well well-lg text-center">
-                        <h4><a href="#">Upload a video link</a></h4>
+                        <h4><a href="{% url 'add_subject_link' subject.slug %}">Upload a video link</a></h4>
                     </div>
                 </div>
             </div>
@@ -36,15 +36,35 @@
                         {{u.upload_time}}<br>
                         Uploaded by {{u.uploader}}<br>
                         <a href={{MEDIA_URL}}{{u.upload_file.name}}>Click here to view upload</a><br>
+                        <a href="{% url 'view_file_discussion' subject.slug u.upload_file_id %}">To comment, click here</a>
+                        {% endfor %}
+                        {% else %}
+                        <div class="well text-center">
+                            No student has uploaded any files to {{subject.name}}
+                            {% endif %}
+                        </div>
+                    </div>
+                <div class="col-lg-6">
+                    <div class="well well-sm text-center">
+                        <h5>Student link shares for {{subject.name}}</h5>
+                    </div>
+                    {% if links %}
+                    <div class="well text-center">
+                        {% for l in links %}
+                        {{l.tags}}<br>
+                        {{l.comment}}<br>
+                        {{l.upload_time}}<br>
+                        Uploaded by {{l.uploader}}<br>
+                        <a href="#">Click here to view upload</a><br>
                         <a href="#">To comment, click here</a>
                         {% endfor %}
-                        {% endif %}
+                        {% else %}
+                        <div class="well text-center">
+                            No student has shared any links for {{subject.name}}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-
-
-
-
-        </div>
+          </div>
 
 {% endblock %}
