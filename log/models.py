@@ -136,13 +136,12 @@ class StudentFileUploads(models.Model):
 	class Meta:
 		verbose_name_plural = 'Student File Uploads'
 
-#Comment class for the file uploads - set up so that each comment can be replied to
-# class FileComment(models.Model):
-# 	first_post = models.ForeignKey(StudentFileUploads)
-# 	author = CurrentUserField()
-# 	reply = models.ForeignKey('FileComment', null=True, related_name='replies')
-# 	comment = models.TextField(max_length=500)
-# 	upload_time = models.DateTimeField(default=timezone.now)
+#Comment class for the file uploads
+class FileComment(models.Model):
+	first_post = models.ForeignKey(StudentFileUploads)
+	author = CurrentUserField()
+	comment = models.TextField(max_length=500)
+	upload_time = models.DateTimeField(default=timezone.now)
 
 #It is most unlikely that students would have access to their own video files to upload,
 #so it made sense to include an opportunity to upload links to videos as well - 
@@ -160,17 +159,14 @@ class StudentVideoLinkUploads(models.Model):
 	class Meta:
 		verbose_name_plural = 'Student Link Uploads'
 
+#Comment class for the link uploads
+class LinkComment(models.Model):
+	first_post = models.ForeignKey(StudentVideoLinkUploads)
+	author = CurrentUserField()
+	comment = models.TextField(max_length=500)
+	upload_time = models.DateTimeField(default=timezone.now)
 
-# class Comment(models.Model):
-# 	video = models.ForeignKey(Video)
-# 	user = CurrentUserField()
-# 	def __unicode__(self):
-# 		return self.name
-# 	comment = models.CharField(max_length=2000, null=True)
-# 	date_posted = models.DateTimeField(auto_now=True)
 
-# 	def __str__(self):
-# 		return self.comment
 
 # class Quiz(models.Model):
 # 	quizID = models.AutoField(primary_key=True)
@@ -191,13 +187,5 @@ class StudentVideoLinkUploads(models.Model):
 # 	result = models.IntegerField(default=0)
 
 
-
-# class Upload(models.Model):
-# 	# videoID = models.ForeignKey(Video)
-# 	# lecturer_email = models.ForeignKey(Subject)
-# 	# quizID = models.ForeignKey(Quiz)
-# 	upload_time = models.DateTimeField(default=timezone.now)
-# 	description = models.CharField(max_length=9999, null=True)
-# 	tag = models.CharField(max_length=25)
 
 

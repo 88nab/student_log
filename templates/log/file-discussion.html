@@ -10,15 +10,29 @@
 			<div class="original_post">
 				<p>{{file.comment}}<br></p>
 				<b> - {{file.uploader}}</b><br>
-				<p id="comment-font"><i>{{file.upload_time}}</i><br></p>
+				<p id="comment-font"><i>{{file.upload_time}}</i><br><br></p>
 			</div>
-			<!-- <div class="comment_section">
-				<form id="file_comment_form" method = "post" action = "{% url 'view_file_discussion' subject.slug file.upload_file_id %}">
+			<form id="file_comment_form" method = "post" action = "{% url 'view_file_discussion' subject.slug file.upload_file_id %}">
 					{% csrf_token %}
 					{{ form.as_p }}
 					<input type="submit" class="btn btn-default" value="Submit" />
 				</form>
-			</div> -->
+				<hr>
+			</div>
+			<div class="col-lg-3">
+			</div>
+			<div class="comment_section col-lg-6 text-center">
+				<strong>{{comments.count}} Comment{{comments|pluralize}}</strong>
+				<br><br>
+				{% for c in comments %}
+				<blockquote class= "blockquote well">
+					<p class ="comment-detail">{{c.comment}}</p>
+					<footer class="blockquote-footer">by <cite title="Source Title">{{c.author}}</cite></footer>
+				</blockquote>
+				{% endfor %}
+			</div>
+			<div class="col-lg-3">
+			</div>
 		</div>
 	</div>
 	{% endblock %}

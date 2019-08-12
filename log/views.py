@@ -435,17 +435,21 @@ def add_subject_link(request, subject_name_slug):
 def view_file_discussion(request, subject_name_slug, fileID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
+	first_post = StudentFileUploads.objects.get(upload_file_id=fileID)
+	comments = FileComment.objects.filter(first_post=first_post).order_by('upload_time')
 	context_dict={}
-	# form = FileCommentForm()
-	# if request.method == 'POST':
-	# 	form = FileCommentForm(request.POST)
+	form = FileCommentForm()
+	if request.method == 'POST':
+		form = FileCommentForm(request.POST)
 
-	# 	if form.is_valid():
-	# 		form.save(commit=True)
-	# 		return index(request)
+		if form.is_valid():
+			comment = request.POST.get('comment') 
+			comment =FileComment.objects.create(first_post=first_post, author=request.user, comment=comment)
+			comment.save()
+			return HttpResponseRedirect(request.path_info)
 
-	# 	else:
-	# 		print(form.errors)
+		else:
+			form = FileCommentForm()
 
 	try:
 		subject = Subject.objects.get(slug=subject_name_slug)
@@ -454,7 +458,8 @@ def view_file_discussion(request, subject_name_slug, fileID):
 		context_dict['file']= file
 		context_dict['user_type']=user_type
 		context_dict['subjects']= subjects
-		# context_dict['form']=form
+		context_dict['comments']= comments
+		context_dict['form']=form
 	except StudentFileUploads.DoesNotExist:
 		context_dict['file']= None
 
@@ -481,7 +486,39 @@ def timestamped_video(request, videoID):
 	response = render(request, 'log/timestamped-video.html', context_dict)
 	return response
 
+def view_link_discussion(request, subject_name_slug, linkID):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	first_post = StudentFileUploads.objects.get(upload_link_id=linkID)
+	comments = FileComment.objects.filter(first_post=first_post).order_by('upload_time')
+	context_dict={}
+	form = FileCommentForm()
+	if request.method == 'POST':
+		form = FileCommentForm(request.POST)
 
+		if form.is_valid():
+			comment = request.POST.get('comment') 
+			comment =LinkComment.objects.create(first_post=first_post, author=request.user, comment=comment)
+			comment.save()
+			return HttpResponseRedirect(request.path_info)
+
+		else:
+			form = FileCommentForm()
+
+	try:
+		subject = Subject.objects.get(slug=subject_name_slug)
+		link = StudentVideoLinkUploads.objects.get(upload_link_id=linkID)
+		context_dict['subject']= subject
+		context_dict['link']= link
+		context_dict['user_type']=user_type
+		context_dict['subjects']= subjects
+		context_dict['comments']= comments
+		context_dict['form']=form
+	except StudentFileUploads.DoesNotExist:
+		context_dict['link']= None
+
+	response = render(request, 'log/link-discussion.html', context_dict)
+	return response
 
 
 
