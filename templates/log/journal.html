@@ -18,8 +18,8 @@
                 {% for n in notes %}
                 <h4>Title </h4>
                 {{n.title}}<br>
-                <h4>Time Saved</h4>
-                {{n.created_on}}<br>
+                <h4>Note Extract</h4>
+                {{n.snippet}}<br>
                 <h4><a href="{% url 'show_note' n.slug %}">View Note</a></h4>
                 {% endfor %}
                 {% endif %}

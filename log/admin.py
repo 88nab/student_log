@@ -32,7 +32,13 @@ class JournalContentAdmin(admin.ModelAdmin):
 class StudentFileUploadsAdmin(admin.ModelAdmin):
 	list_display=('uploader', 'upload_file', 'upload_time')
 
+class StudentVideoLinkUploadsAdmin(admin.ModelAdmin):
+	list_display=('uploader', 'upload_link', 'upload_time')
+
 class FileCommentAdmin(admin.ModelAdmin):
+	list_display=('first_post', 'author', 'comment')
+
+class LinkCommentAdmin(admin.ModelAdmin):
 	list_display=('first_post', 'author', 'comment')
 
 
@@ -44,6 +50,7 @@ admin.site.register(JournalCreator, JournalCreatorAdmin)
 admin.site.register(Note, NoteAdmin)
 admin.site.register(JournalContent, JournalContentAdmin)
 admin.site.register(StudentFileUploads, StudentFileUploadsAdmin)
+admin.site.register(StudentVideoLinkUploads, StudentVideoLinkUploadsAdmin)
 admin.site.register(FileComment, FileCommentAdmin)
 
 

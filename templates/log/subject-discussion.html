@@ -51,12 +51,12 @@
                     {% if links %}
                     <div class="well text-center">
                         {% for l in links %}
-                        {{l.tags}}<br>
+                        <h4>{{l.tags}}</h4>
                         {{l.comment}}<br>
                         {{l.upload_time}}<br>
                         Uploaded by {{l.uploader}}<br>
-                        <a href="#">Click here to view upload</a><br>
-                        <a href="#">To comment, click here</a>
+                        <a href="{% url 'view_video_link' subject.slug l.upload_link_id %}">Click here to view upload</a><br>
+                        <a href="{% url 'view_link_discussion' subject.slug l.upload_link_id %}">To comment, click here</a>
                         {% endfor %}
                         {% else %}
                         <div class="well text-center">

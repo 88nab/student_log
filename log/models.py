@@ -118,6 +118,9 @@ class Note(models.Model):
 	def __str__(self):
 		return self.title
 
+	def snippet(self):
+		return self.note[:25] + '...'
+
 
 #This model represents files uploaded by students. Have used the file field,
 #so they should be able to upload a wide variety of content.
@@ -142,6 +145,7 @@ class FileComment(models.Model):
 	author = CurrentUserField()
 	comment = models.TextField(max_length=500)
 	upload_time = models.DateTimeField(default=timezone.now)
+
 
 #It is most unlikely that students would have access to their own video files to upload,
 #so it made sense to include an opportunity to upload links to videos as well - 

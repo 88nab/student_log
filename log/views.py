@@ -289,7 +289,7 @@ def show_journal(request, username):
 	context_dict={}
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
-	notes = Note.objects.filter(student=request.user)
+	notes = Note.objects.filter(student=request.user).order_by('-created_on')
 	timestamps = JournalContent.objects.filter(student=request.user)
 	context_dict={'notes':notes, 'timestamps': timestamps, 'user_type':user_type, 'subjects': subjects, 'username': username}
 
@@ -364,7 +364,8 @@ def search_tags(request):
 	subjects = Subject.objects.all().order_by('uploader')
 	tags = JournalContent.objects.all().order_by('tags') #Tags from journal
 	sTags = StudentFileUploads.objects.all().order_by('tags') #Tags from student uploads
-	response = render(request, 'log/search_tags.html', {'tags':tags, 'sTags':sTags, 'user_type': user_type, 'subjects':subjects})
+	sLinks = StudentVideoLinkUploads.objects.all().order_by('tags') #Tags from student link uploads
+	response = render(request, 'log/search_tags.html', {'tags':tags, 'sTags':sTags, 'sLinks':sLinks, 'user_type': user_type, 'subjects':subjects})
 	return response
 
 def subject_discussion(request, subject_name_slug):
@@ -489,8 +490,8 @@ def timestamped_video(request, videoID):
 def view_link_discussion(request, subject_name_slug, linkID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
-	first_post = StudentFileUploads.objects.get(upload_link_id=linkID)
-	comments = FileComment.objects.filter(first_post=first_post).order_by('upload_time')
+	first_post = StudentVideoLinkUploads.objects.get(upload_link_id=linkID)
+	comments = LinkComment.objects.filter(first_post=first_post).order_by('upload_time')
 	context_dict={}
 	form = FileCommentForm()
 	if request.method == 'POST':
@@ -520,5 +521,15 @@ def view_link_discussion(request, subject_name_slug, linkID):
 	response = render(request, 'log/link-discussion.html', context_dict)
 	return response
 
+def view_video_link(request, subject_name_slug, linkID):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	link = StudentVideoLinkUploads.objects.get(upload_link_id=linkID)
+	subject = Subject.objects.get(slug=subject_name_slug)
+	context_dict ={'link': link, 'subject': subject, 'user_type':user_type, 'subjects': subjects,}
+	print(link.upload_link)
+
+
+	return render(request, 'log/embedded-link.html', context_dict)
 
 

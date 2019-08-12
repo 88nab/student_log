@@ -19,6 +19,7 @@
 			<br><br>
 					{% for tag in tags %}
 					{% for s in sTags %}
+					{% for l in sLinks %}
 					<div class="row">
 						<div class="col-lg-12 text-center">
 							<div class="well">
@@ -31,6 +32,12 @@
 								<p><strong>{{s.tags}} - </strong>Student Upload - <a href={{MEDIA_URL}}{{s.upload_file.name}}>Link to Upload</a></h5></p>
 							</div>
 						</div>
+						<div class="well">
+								<div id="sLinks-list">
+								<p><strong>{{l.tags}} - </strong>Student Link Upload - <a href="{% url 'view_video_link' l.subject.slug l.upload_link_id %}">Shared Link</a></h5></p>
+							</div>
+						</div>
+								{% endfor %}
 								{% endfor %}
 								{% endfor %}
 						</div>

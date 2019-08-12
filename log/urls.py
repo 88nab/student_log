@@ -36,9 +36,10 @@ urlpatterns = [
     url(r'^subject/(?P<subject_name_slug>[\w\-]+)/subject-discussion/$', views.subject_discussion, name='subject_discussion'),
     url(r'^subject/(?P<subject_name_slug>[\w\-]+)/file-upload/$', views.add_subject_file, name='add_subject_file'),
     url(r'^subject/(?P<subject_name_slug>[\w\-]+)/link-upload/$', views.add_subject_link, name='add_subject_link'),
-    url(r'^subject/(?P<subject_name_slug>[\w\-]+)/file-upload/view-upload/(?P<fileID>\d+)/$', views.view_file_discussion, name='view_file_discussion'),
-    url(r'^subject/(?P<subject_name_slug>[\w\-]+)/link-upload/view-upload/(?P<linkID>\d+)/$', views.view_link_discussion, name='view_link_discussion'),
+    url(r'^subject/(?P<subject_name_slug>[\w\-]+)/file-upload/view-upload-discussion/(?P<fileID>\d+)/$', views.view_file_discussion, name='view_file_discussion'),
+    url(r'^subject/(?P<subject_name_slug>[\w\-]+)/link-upload/view-upload-discussion/(?P<linkID>\d+)/$', views.view_link_discussion, name='view_link_discussion'),
     url(r'^viewer/video/timestamped/(?P<videoID>\d+)/$', views.timestamped_video, name='timestamped_video'),
+    url(r'^subject/(?P<subject_name_slug>[\w\-]+)/link-upload/view-upload/(?P<linkID>\d+)/$', views.view_video_link, name ='view_video_link'),
 
 
 

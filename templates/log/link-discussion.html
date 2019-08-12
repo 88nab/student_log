@@ -22,6 +22,7 @@
 			<div class="col-lg-3">
 			</div>
 			<div class="comment_section col-lg-6 text-center">
+				{% if comments %}
 				<strong>{{comments.count}} Comment{{comments|pluralize}}</strong>
 				<br><br>
 				{% for c in comments %}
@@ -30,6 +31,7 @@
 					<footer class="blockquote-footer">by <cite title="Source Title">{{c.author}}</cite></footer>
 				</blockquote>
 				{% endfor %}
+				{% endif %}
 			</div>
 			<div class="col-lg-3">
 			</div>
