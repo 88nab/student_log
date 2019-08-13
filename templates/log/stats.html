@@ -10,6 +10,7 @@
 			<video id='my-video' class='video-js vjs-big-play-centered' controls preload='auto'  data-setup='{"fluid":true}'src="{{MEDIA_URL}}{{video.videoFile.name}}"></video>
 		
 				<h4><br>
+				Video Stats - <br></h4>
 				Video ID: {{video.videoID}}
 				<br>
 				Filename: {{video.videoFile}}
@@ -24,12 +25,20 @@
 				<br>
 				Subject: {{video.subject}} 
 				<br>
-				Student Rating -
-				<br>
+				<h4>Student Subject Rating -</h4>
 				Likes: {{video.subject.likes}}
 				<br>
 				Dislikes: {{video.subject.dislikes}}
-				<br></h4>
+				<br>
+				<h4>Student Video Tags - <br></h4>
+				{% if tags %}
+				Tags:
+				{% for t in tags %}
+				{{forloop.counter}}. {{t.tags}}</h4>
+				{% endfor %}
+				{% else %}
+				No students have tagged this video yet.
+				{% endif %}
 			</div>
 		</div>
 	</div>

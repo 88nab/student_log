@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from log.models import *
 
 
@@ -8,6 +8,12 @@ class CustomUserCreationForm(UserCreationForm):
 	class Meta(UserCreationForm):
 		model = CustomUser
 		fields = ('email', 'username', 'first_name', 'last_name', 'user_type')
+
+class CustomUserChangeForm(UserChangeForm):
+
+	class Meta(UserChangeForm):
+		model = CustomUser
+		fields = ('username', 'email', 'first_name', 'last_name', 'password')
 
 class ContactForm(forms.Form):
     email = forms.EmailField(required=True)
@@ -18,7 +24,7 @@ class UploadForm(forms.ModelForm):
 
 	class Meta:
 		model = Video
-		exclude = ('videoID', 'uploader', 'upload_time','views', 'likes', 'subject')
+		exclude = ('videoID', 'uploader', 'upload_time','views', 'likes',  'dislikes', 'subject')
 
 	
 class SubjectForm(forms.ModelForm):

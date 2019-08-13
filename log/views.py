@@ -18,7 +18,7 @@ from datetime import datetime
 def index(request):
 	# Have to add the user_type and subjects to every view so that the complete dropdown menu
 	# appears in the navbar - perhaps a quicker way to fix this would be to create a view for the base.
-	# Will look into tidying it later
+	# Will look into tidying it later, focusing on getting more functionality first
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
 	most_viewed=Video.objects.all().order_by('-views')[:5]
@@ -107,6 +107,29 @@ def change_password(request):
 	return render(request, 'log/change_password.html', {
 		'form': form, 'user_type': user_type, 'subjects':subjects
 	})
+
+def profile(request):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	response = render(request, 'log/profile.html', {'user_type': user_type, 'subjects':subjects})
+	return response
+
+def edit_profile(request):
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	
+
+	if request.method=='POST':
+		form = CustomUserChangeForm(request.POST, instance=request.user)
+		if form.is_valid:
+			form.save()
+			return redirect('profile')
+	else:
+		form = CustomUserChangeForm(instance=request.user)
+		context_dict= {'form': form, 'user_type': user_type, 'subjects':subjects}
+
+	response = render(request, 'log/edit_profile.html', context_dict)
+	return response
 
 @login_required
 def user_logout(request):
@@ -264,11 +287,14 @@ def video_stats(request, videoID):
 
 	try:
 		video = Video.objects.get(videoID=videoID)
+		tags = JournalContent.objects.filter(videoID=videoID)
 		context_dict['video']= video
+		context_dict['tags'] = tags
 		context_dict['user_type']=user_type
 		context_dict['subjects']= subjects
 	except Video.DoesNotExist:
 		context_dict['video']= None
+		context_dict['tags'] = None
 
 	response = render(request, 'log/stats.html', context_dict)
 	return response
@@ -545,8 +571,6 @@ def view_video_link(request, subject_name_slug, linkID):
 	subject = Subject.objects.get(slug=subject_name_slug)
 	
 	context_dict ={'link': link,  'subject': subject, 'user_type':user_type, 'subjects': subjects,}
-
-
 
 	return render(request, 'log/embedded-link.html', context_dict)
 

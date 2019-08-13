@@ -3,9 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django import forms
 from django.utils import timezone
 from django.conf import settings
-from django.db.models import Q
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django_currentuser.db.models import CurrentUserField
 from django.template.defaultfilters import slugify
 
@@ -24,7 +21,7 @@ class CustomUser(AbstractUser):
 	email = models.EmailField(max_length=70, unique=True)
 	first_name = models.CharField(max_length=50)
 	last_name = models.CharField(max_length=50)
-	user_type = models.CharField(max_length=8, choices=USER_TYPE_CHOICES, default='Student')
+	user_type = models.CharField(max_length=8, choices=USER_TYPE_CHOICES, default='STUDENT')
 	username = models.CharField(max_length=20, unique=True)
 
 	def __str__(self):
