@@ -160,6 +160,7 @@ class StudentVideoLinkUploads(models.Model):
 	tags = models.CharField(max_length=25)
 	comment = models.CharField(max_length=9999, null=True)
 
+
 	class Meta:
 		verbose_name_plural = 'Student Link Uploads'
 

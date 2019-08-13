@@ -526,8 +526,9 @@ def view_video_link(request, subject_name_slug, linkID):
 	subjects = Subject.objects.all().order_by('uploader')
 	link = StudentVideoLinkUploads.objects.get(upload_link_id=linkID)
 	subject = Subject.objects.get(slug=subject_name_slug)
-	context_dict ={'link': link, 'subject': subject, 'user_type':user_type, 'subjects': subjects,}
-	print(link.upload_link)
+	
+	context_dict ={'link': link,  'subject': subject, 'user_type':user_type, 'subjects': subjects,}
+
 
 
 	return render(request, 'log/embedded-link.html', context_dict)
