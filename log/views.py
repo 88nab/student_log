@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from datetime import datetime
 
 
 @login_required 
@@ -21,7 +22,6 @@ def index(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
 	most_viewed=Video.objects.all().order_by('-views')[:5]
-	# most_liked=Video.objects.all().order_by('-likes')[:5]
 	response = render(request, 'log/index.html', {'videos': most_viewed,'user_type': user_type, 'subjects':subjects})
 	return response
 
@@ -71,7 +71,6 @@ def register_profile(request):
 def contact_us(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
-
 
 	if request.method == 'GET':
 		form = ContactForm()
@@ -163,7 +162,14 @@ def show_subject(request, subject_name_slug):
 
 	try:
 		subject = Subject.objects.get(slug=subject_name_slug)
+		if subject:
+			views= subject.views + 1
+			subject.views =views
+			subject.save()
+			print(subject.views)
+
 		videos = Video.objects.filter(subject=subject)
+		views = subject.views
 		context_dict['videos'] = videos
 		context_dict['subject'] = subject
 		context_dict['user_type']=user_type
@@ -275,6 +281,11 @@ def video_test(request, videoID):
 
 	try:
 		video = Video.objects.get(videoID=videoID)
+		if video:
+			views= video.views + 1
+			video.views =views
+			video.save()
+			# More tracking hits rather than actual views - will improve in further releases
 		context_dict['video']= video
 		context_dict['user_type']=user_type
 		context_dict['subjects']= subjects
@@ -476,6 +487,12 @@ def timestamped_video(request, videoID):
 		journal_item = JournalContent.objects.get(videoID=videoID)
 		print(journal_item.timestamp)
 		video = Video.objects.get(videoID=videoID)
+		if video:
+			views= video.views + 1
+			video.views =views
+			video.save()
+			# Like above - just counting actual views of the page rather than interaction with video
+			# Would need to develop further in future releases
 		context_dict['journal_item']= journal_item
 		context_dict['video']= video
 		context_dict['user_type']=user_type
@@ -532,5 +549,6 @@ def view_video_link(request, subject_name_slug, linkID):
 
 
 	return render(request, 'log/embedded-link.html', context_dict)
+
 
 
