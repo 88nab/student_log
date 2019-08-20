@@ -31,6 +31,7 @@ class SubjectForm(forms.ModelForm):
 	name = forms.CharField(max_length=128, help_text="Please enter the name of your subject.")
 	views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 	likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+	dislikes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 	slug = forms.CharField(widget=forms.HiddenInput(),required=False)
 
 	class Meta:
@@ -100,6 +101,19 @@ class LinkCommentForm(forms.ModelForm):
 	class Meta:
 		model = LinkComment
 		fields = ('comment',)
+
+class QuizForm(forms.ModelForm):
+
+	class Meta:
+		model = Quiz
+		fields = ('quiz_name',)
+
+class QuestionForm(forms.ModelForm):
+
+
+	class Meta:
+		model = Question
+		exclude=('quiz',)
 
 
 	

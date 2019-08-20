@@ -5,7 +5,7 @@
 	<html lang="en">
 		 <head>
 		 	{% block title_block %}
-	 		 <title>Student's Log</title>
+	 		 <title>Students' Log</title>
 	 		 {% endblock %}
 				  <meta charset="utf-8">
 				  <meta name="viewport" content="width=device-width, initial-scale-1">
@@ -26,7 +26,7 @@
 		            		<span class="icon-bar"></span>
 		            		<span class="icon-bar"></span>
 		            	</button>
-		                <a href="{% url 'index' %}" class="navbar-brand">Student's Log</a>
+		                <a href="{% url 'index' %}" class="navbar-brand">Students' Log</a>
 		            </div>
 
 		            <!-- Menu Stuff -->
@@ -59,9 +59,8 @@
 		             
 		                		{% if user.user_type == 'STUDENT' %}
 		                		<li><a href="{% url 'show_journal' user.username %}">{{user.first_name}}'s Journal</a></li>
-		                		{% endif %}
-		               			<!-- <li><a href="{% url 'forum_view' %}">Tag Rater</a></li>  -->
 		               			<li><a href="{% url 'search_tags' %}">Search Tags</a></li>
+		               			{% endif %}
 		                   		<li><a href="{% url 'contact_us' %}">Contact Us</a></li>
 		                   		</ul>
 		                   	</ul>

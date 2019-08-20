@@ -1,0 +1,30 @@
+{% extends 'log/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+
+<div class="page-header text-center">
+	<br>
+	<h1>Add Quiz Questions</h1>
+	
+</div>
+
+<div class="row">
+     <div class = "col-lg-12 text-center">
+        	<form id="question_form" method="post" action=".">
+              			{% csrf_token %}
+              			{{ form.as_p }}
+          		<input type="submit" class="btn btn-default" value="Add Question" /> 
+        </form>
+        <br><br>
+        <form>
+        <button type="button" class="button btn-info" onclick="window.location.href = '{% url 'index' %}'" >Click here after you've submitted your last question!</button>
+      </form>
+      <h3>Please note that your last question will not be saved if you do not first click the add question button.</h3>
+    </div>
+</div>
+</div>
+
+
+
+{% endblock %}

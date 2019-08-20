@@ -88,8 +88,9 @@ def contact_us(request):
 
 # Not currently using this
 def successView(request):
-	return HttpResponse('Success! Thank you for your message.')
+	return HttpResponse('Success! Thank you for creating a quiz.')
 
+@login_required 
 def change_password(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -108,12 +109,14 @@ def change_password(request):
 		'form': form, 'user_type': user_type, 'subjects':subjects
 	})
 
+@login_required 
 def profile(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
 	response = render(request, 'log/profile.html', {'user_type': user_type, 'subjects':subjects})
 	return response
 
+@login_required 
 def edit_profile(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -136,6 +139,7 @@ def user_logout(request):
 	logout(request)
 	return render(request, 'log/logout.html', context={})
 
+@login_required 
 def upload(request, subject_name_slug):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -152,6 +156,8 @@ def upload(request, subject_name_slug):
 		if form.is_valid():
 			if subject:
 				video=form.save(commit=False)
+				# video.uploader = request.user
+				# Going to try and change from using current user field after I next delete the database
 				video.subject=subject
 				video.views=0
 				video.likes=0
@@ -162,6 +168,7 @@ def upload(request, subject_name_slug):
 	context_dict={'form': form, 'subject': subject, 'user_type': user_type, 'subjects':subjects}
 	return render(request, 'log/upload.html', context_dict)
 
+@login_required 
 def add_subject(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -178,6 +185,7 @@ def add_subject(request):
 
 	return render(request, 'log/add_subject.html', {'form': form, 'user_type': user_type, 'subjects':subjects})
 
+@login_required 
 def show_subject(request, subject_name_slug):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')	
@@ -189,20 +197,24 @@ def show_subject(request, subject_name_slug):
 			views= subject.views + 1
 			subject.views =views
 			subject.save()
-			print(subject.views)
+			# Views will go up if it's viewed by a lecturer or a student
 
 		videos = Video.objects.filter(subject=subject)
+		IDs = videos.values('videoID')
+		tags = JournalContent.objects.filter(videoID=IDs)
 		views = subject.views
 		context_dict['videos'] = videos
+		context_dict['tags'] = tags
 		context_dict['subject'] = subject
 		context_dict['user_type']=user_type
 		context_dict['subjects']= subjects
 	except Subject.DoesNotExist:
 		context_dict['videos'] = None
 		context_dict['subject'] = None
+		context_dict['tags'] = None
 	return render(request, 'log/subject.html', context_dict)
 
-
+@login_required 
 def journal_creator(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -219,12 +231,13 @@ def journal_creator(request):
 
 	return render(request, 'log/journal_creator.html', {'form': form, 'user_type': user_type, 'subjects':subjects})
 
-
+@login_required 
 def forum_view(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
 	response = render(request, 'log/forum.html', {'user_type': user_type, 'subjects':subjects})
 	return response
+
 
 def like_video(request):
 	videoID =None
@@ -280,6 +293,7 @@ def dislike_subject(request):
 			slug.save()
 		return HttpResponse(dislikes)
 
+@login_required 
 def video_stats(request, videoID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -299,7 +313,7 @@ def video_stats(request, videoID):
 	response = render(request, 'log/stats.html', context_dict)
 	return response
 
-
+@login_required 
 def video_test(request, videoID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -312,6 +326,7 @@ def video_test(request, videoID):
 			video.views =views
 			video.save()
 			# More tracking hits rather than actual views - will improve in further releases
+			# The views, however, are limited to student hits to the page
 		context_dict['video']= video
 		context_dict['user_type']=user_type
 		context_dict['subjects']= subjects
@@ -321,7 +336,7 @@ def video_test(request, videoID):
 	response = render(request, 'log/video_test.html', context_dict)
 	return response
 
-
+@login_required 
 def show_journal(request, username):
 	context_dict={}
 	user_type = CustomUser.objects.values('user_type')
@@ -332,6 +347,7 @@ def show_journal(request, username):
 
 	return render(request, 'log/journal.html', context_dict)
 
+@login_required 
 def add_note(request, username):
 	context_dict={}
 	user_type = CustomUser.objects.values('user_type')
@@ -350,7 +366,7 @@ def add_note(request, username):
 	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'username': username,}
 	return render(request, 'log/note_form.html', context_dict)
 
-
+@login_required 
 def show_note(request, slug):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -367,6 +383,7 @@ def show_note(request, slug):
 	response = render(request, 'log/note.html', context_dict)
 	return response
 
+@login_required 
 def add_journal_content(request, videoID):
 	context_dict={}
 	user_type = CustomUser.objects.values('user_type')
@@ -386,7 +403,7 @@ def add_journal_content(request, videoID):
 	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'video': video,}
 	return render(request, 'log/journal_content_form.html', context_dict)
 
-
+@login_required 
 def video_tags(request, videoID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -395,7 +412,7 @@ def video_tags(request, videoID):
 	response = render(request, 'log/tags.html', context_dict)
 	return response
 
-
+@login_required 
 def search_tags(request):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -405,6 +422,7 @@ def search_tags(request):
 	response = render(request, 'log/search_tags.html', {'tags':tags, 'sTags':sTags, 'sLinks':sLinks, 'user_type': user_type, 'subjects':subjects})
 	return response
 
+@login_required 
 def subject_discussion(request, subject_name_slug):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -426,6 +444,7 @@ def subject_discussion(request, subject_name_slug):
 	return render(request, 'log/subject-discussion.html', context_dict)
 
 
+@login_required 
 def add_subject_file(request, subject_name_slug):
 	context_dict={}
 	user_type = CustomUser.objects.values('user_type')
@@ -448,6 +467,7 @@ def add_subject_file(request, subject_name_slug):
 	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'subject':subject, 'user': user,}
 	return render(request, 'log/student-file-upload.html', context_dict)
 
+@login_required 
 def add_subject_link(request, subject_name_slug):
 	context_dict={}
 	user_type = CustomUser.objects.values('user_type')
@@ -470,6 +490,7 @@ def add_subject_link(request, subject_name_slug):
 	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'subject':subject, 'user': user,}
 	return render(request, 'log/student-link-upload.html', context_dict)
 
+@login_required 
 def view_file_discussion(request, subject_name_slug, fileID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -504,6 +525,7 @@ def view_file_discussion(request, subject_name_slug, fileID):
 	response = render(request, 'log/file-discussion.html', context_dict)
 	return response
 
+@login_required 
 def timestamped_video(request, videoID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -530,6 +552,7 @@ def timestamped_video(request, videoID):
 	response = render(request, 'log/timestamped-video.html', context_dict)
 	return response
 
+@login_required 
 def view_link_discussion(request, subject_name_slug, linkID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -564,6 +587,7 @@ def view_link_discussion(request, subject_name_slug, linkID):
 	response = render(request, 'log/link-discussion.html', context_dict)
 	return response
 
+@login_required 
 def view_video_link(request, subject_name_slug, linkID):
 	user_type = CustomUser.objects.values('user_type')
 	subjects = Subject.objects.all().order_by('uploader')
@@ -574,5 +598,53 @@ def view_video_link(request, subject_name_slug, linkID):
 
 	return render(request, 'log/embedded-link.html', context_dict)
 
+@login_required 
+def add_quiz(request, subject_name_slug, videoID):
+	context_dict={}
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	subject = Subject.objects.get(slug=subject_name_slug)
+	video = Video.objects.get(videoID=videoID)
+	form = QuizForm()
+	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'video': video,}
+	if request.method == 'POST':
+		form = QuizForm(request.POST)
+
+		if form.is_valid():
+			quiz = request.POST.get('quiz_name') 
+			quiz =Quiz.objects.create(quiz_name=quiz, creator=request.user, video=video, subject = subject)
+			quiz.save()
+			return redirect('add_question', quizID=quiz.quizID)
+
+		else:
+			print(form.errors)
+
+	return render(request, 'log/add_quiz.html', context_dict)
+
+
+@login_required 
+def add_question(request, quizID):
+	context_dict={}
+	user_type = CustomUser.objects.values('user_type')
+	subjects = Subject.objects.all().order_by('uploader')
+	quiz = Quiz.objects.get(quizID=quizID)
+	form = QuestionForm()
+	context_dict={'form': form, 'user_type':user_type, 'subjects': subjects, 'quiz': quiz,}
+	if request.method == 'POST':
+		form = QuestionForm(request.POST)
+		if form.is_valid():
+			question  =  request.POST.get('question')
+			first_answer=request.POST.get('first_answer')
+			second_answer=request.POST.get('second_answer')
+			third_answer=request.POST.get('third_answer')
+			fourth_answer=request.POST.get('fourth_answer')
+			correct_answer=request.POST.get('correct_answer')
+			question = Question.objects.create(question=question, first_answer=first_answer, second_answer=second_answer, third_answer=third_answer, fourth_answer=fourth_answer, correct_answer=correct_answer, quiz=quiz)
+			question.save()
+
+		else:
+			print(form.errors)
+
+	return render(request, 'log/add_question.html', context_dict)
 
 

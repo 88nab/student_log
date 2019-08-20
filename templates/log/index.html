@@ -24,15 +24,12 @@
 				<h3><a href="{% url 'video_test' video.videoID %}">To view this video, click here</a></h3>
 				{% else %}
 				<h3><a href="{% url 'video_stats' video.videoID %}">View Video Stats</a></h3>
-			</div>
 				{% endif %}
-			</ul>
+				</ul>
+			</div>
 		</div>
 	</div>
-</div>
-		{% endfor %}
+	{% endfor %}
 	{% endif %}
 </div>
-
-	<!-- <script type="text/javascript" src="{% static 'js/likes.js' %}"></script> -->
 	{% endblock %}

@@ -32,7 +32,14 @@
 						<p><h4>{{ v.videoDescription }}</h4></p>
 						{% if request.user.user_type == 'LECTURER' %}
 						<h3><a href="{% url 'video_stats' v.videoID %}">View Video Stats</a></h3>
-						<h3><a href="#">Upload a Quiz</a></h3>
+						<h3><a href="{% url 'add_quiz' subject.slug v.videoID %}">Upload a Quiz</a></h3>
+						<h3>This video has been tagged {{tags.count}} time{{tags|pluralize}}.</h3>
+						{% if tags.count > 0 %}
+						<div class="alert alert-danger">
+						<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+							There has been much interaction with this video. Please upload a quiz to offer students more feedback.
+						{% endif %}
+						</div>
 						{% else %}
 						<h3><a href="{% url 'video_test' v.videoID %}">View Video</a></h3>
 					{% endif %}

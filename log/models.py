@@ -8,6 +8,8 @@ from django.template.defaultfilters import slugify
 
 # Create your models here.
 
+# Going to try and get rid of the current user field stuff 
+
 
 #Created a custom user to ensure that the user_type would be included from the get-go
 #This is beneficial for security aspects as different users will have access to different parts of the site
@@ -38,6 +40,7 @@ class Subject(models.Model):
 	dislikes=models.IntegerField(default=0)
 	slug = models.SlugField(unique=True)
 	uploader = CurrentUserField()
+	# uploader = models.ForeignKey(CustomUser)
 
 
 	def save(self, *args, **kwargs):
@@ -57,6 +60,7 @@ class Video(models.Model):
 	videoDescription = models.CharField(max_length=250)
 	upload_time = models.DateTimeField(default=timezone.now)
 	uploader = CurrentUserField()
+	# uploader = models.ForeignKey(CustomUser)
 	views = models.IntegerField(default=0)
 	likes = models.IntegerField(default=0)
 	dislikes = models.IntegerField(default=0)
@@ -73,6 +77,7 @@ class Video(models.Model):
 #so there is no real need for a journal ID as well
 class JournalCreator(models.Model):
 	student = CurrentUserField()
+	# student = models.OneToOneField(CustomUser)
 	journalID = models.AutoField(primary_key=True)
 	journal_name = models.CharField(max_length=50, unique=True)
 
@@ -83,12 +88,13 @@ class JournalCreator(models.Model):
 #and view them from the timestamp
 class JournalContent(models.Model):
 	student = CurrentUserField()
+	# student = models.ForeignKey(CustomUser)
 	videoID = models.ForeignKey(Video)
 	time_saved = models.DateTimeField(default=timezone.now)
 	timestamp = models.DecimalField(max_digits=10, decimal_places=2, default=0.00) 
 	# validators=[MinValueValidator(Decimal('0.00'))]
 	#Looks as though it's defaulting to one decimal place, but there are two when you click on the  arrows
-	#Need to fix it so that negative  numbers  aren't an option
+	#Need to fix it so that negative numbers  aren't an option
 	description = models.CharField(max_length=9999, null=True)
 	tags = models.CharField(max_length=25)
 
@@ -101,6 +107,7 @@ class JournalContent(models.Model):
 #There will be no way for other students to access this content.
 class Note(models.Model):
 	student = CurrentUserField()
+	# student = models.ForeignKey(CustomUser)
 	subject = models.ForeignKey(Subject)
 	title = models.CharField(max_length=50, unique=True)
 	slug = models.SlugField(unique=True)
@@ -126,6 +133,7 @@ class Note(models.Model):
 #to the uploads, so that they can discuss the content, perhaps providing each other with feedback, if necessary
 class StudentFileUploads(models.Model):
 	uploader = CurrentUserField()
+	# uploader = models.ForeignKey(CustomUser)
 	upload_file = models.FileField(upload_to='student-uploads/', null=True, verbose_name="")
 	upload_file_id = models.AutoField(primary_key=True, default=0)#Created a default as I'd already populated the database before adding this field - will delete if I end up repopulating the database from scratch again
 	subject = models.ForeignKey(Subject)
@@ -141,6 +149,7 @@ class StudentFileUploads(models.Model):
 class FileComment(models.Model):
 	first_post = models.ForeignKey(StudentFileUploads)
 	author = CurrentUserField()
+	# author = models.ForeignKey(CustomUser)
 	comment = models.TextField(max_length=500)
 	upload_time = models.DateTimeField(default=timezone.now)
 
@@ -151,6 +160,7 @@ class FileComment(models.Model):
 #Otherwise,  takes ont he same format as the model above
 class StudentVideoLinkUploads(models.Model):
 	uploader = CurrentUserField()
+	# uploader = models.ForeignKey(CustomUser)
 	upload_link = models.URLField(max_length=250)
 	upload_link_id = models.AutoField(primary_key=True)
 	subject = models.ForeignKey(Subject)
@@ -166,28 +176,35 @@ class StudentVideoLinkUploads(models.Model):
 class LinkComment(models.Model):
 	first_post = models.ForeignKey(StudentVideoLinkUploads)
 	author = CurrentUserField()
+	# author = models.ForeignKey(CustomUser)
 	comment = models.TextField(max_length=500)
 	upload_time = models.DateTimeField(default=timezone.now)
 
 
 
-# class Quiz(models.Model):
-# 	quizID = models.AutoField(primary_key=True)
-# 	# quiz_questions =
-# 	# quiz_answers = 
+class Quiz(models.Model):
+	quizID = models.AutoField(primary_key=True)
+	quiz_name = models.CharField(max_length=50, unique=True)
+	subject = models.ForeignKey(Subject)
+	video = models.ForeignKey(Video)
+	creator = models.ForeignKey(CustomUser)
 
-# 	class Meta:
-# 		verbose_name_plural = 'Quizzes'
+	class Meta:
+		verbose_name_plural = 'Quizzes'
 
-# 	def __str__(self):
-# 		return self.quizID
+	def __str__(self):
+		return str(self.quizID)
+
+class Question(models.Model):
+	question = models.TextField(max_length=500)
+	first_answer = models.CharField(max_length=250)
+	second_answer = models.CharField(max_length=250)
+	third_answer = models.CharField(max_length=250)
+	fourth_answer = models.CharField(max_length=250)
+	correct_answer = models.CharField(max_length=250)
+	quiz = models.ForeignKey(Quiz)
 
 
-# class QuizResult(models.Model):
-# 	quizID = models.ForeignKey(Quiz)
-# 	studentID = models.ForeignKey(Student)
-# 	time_taken = models.DateTimeField(default=timezone.now)
-# 	result = models.IntegerField(default=0)
 
 
 

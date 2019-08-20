@@ -42,6 +42,11 @@ class FileCommentAdmin(admin.ModelAdmin):
 class LinkCommentAdmin(admin.ModelAdmin):
 	list_display=('first_post', 'author', 'comment')
 
+class QuizAdmin(admin.ModelAdmin):
+	list_display=('quizID', 'quiz_name', 'video')
+
+class QuestionAdmin(admin.ModelAdmin):
+	list_display=('question', 'quiz', 'correct_answer')
 
 
 
@@ -54,7 +59,8 @@ admin.site.register(JournalContent, JournalContentAdmin)
 admin.site.register(StudentFileUploads, StudentFileUploadsAdmin)
 admin.site.register(StudentVideoLinkUploads, StudentVideoLinkUploadsAdmin)
 admin.site.register(FileComment, FileCommentAdmin)
-
+admin.site.register(Quiz, QuizAdmin)
+admin.site.register(Question, QuestionAdmin)
 
 
 
